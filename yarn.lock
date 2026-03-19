@@ -2729,6 +2729,11 @@
     pkg-dir "^5.0.0"
     pluralize "^8.0.0"
 
+"@shopify/graphql-client@1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@shopify/graphql-client/-/graphql-client-1.4.1.tgz#794d9964bbacabc4a15573c0aaf7c56e7a9a3534"
+  integrity sha512-/w4Uchx8ueI8gwmJd1ZbbIGndsjfMEFlzmay3P7rya5zj7K308xne/ggIvWDweueIut2qf1A8lI58xQl9Pu22w==
+
 "@shopify/graphql-codegen@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@shopify/graphql-codegen/-/graphql-codegen-0.0.2.tgz#bcc1b68b3aa43f4ab9d7818ed0d5be73c2256d42"
@@ -2746,25 +2751,29 @@
   dependencies:
     "@shopify/graphql-codegen" "^0.0.2"
 
-"@shopify/hydrogen-react@2025.1.4":
-  version "2025.1.4"
-  resolved "https://registry.yarnpkg.com/@shopify/hydrogen-react/-/hydrogen-react-2025.1.4.tgz#52ee8b8c5563aadf349eab92b9a5b099b671d069"
-  integrity sha512-aXmQoHNOF/fqDYD/K5VqEsiQEMLILbNga/VSJ+g9cfxjBGPRwcdpoT6U9DjvzEdIEBXJbDkUwyy3dvsx4HR5ug==
+"@shopify/hydrogen-react@2026.1.0":
+  version "2026.1.0"
+  resolved "https://registry.yarnpkg.com/@shopify/hydrogen-react/-/hydrogen-react-2026.1.0.tgz#dcfb3a4b2e72c74985209cb61e3fcb438628a3ab"
+  integrity sha512-rlj6CNlOAy2k6vHd+FuC6N0e/RkHzZ07kuQCxP9f+rqmSap3OztV8RaKX7UpRt56bvP2NI9GHnhDg5JfJEMhug==
   dependencies:
     "@google/model-viewer" "^4.0.0"
     "@xstate/fsm" "2.0.0"
     "@xstate/react" "3.2.1"
     graphql "^16.10.0"
     type-fest "^4.33.0"
+    use-isomorphic-layout-effect "1.2.1"
+    use-sync-external-store "1.6.0"
     worktop "^0.7.3"
 
-"@shopify/hydrogen@~2025.1.5":
-  version "2025.1.5"
-  resolved "https://registry.yarnpkg.com/@shopify/hydrogen/-/hydrogen-2025.1.5.tgz#542341d67170a72fa078b0fbf31c5d55801ac77e"
-  integrity sha512-SwYazzvT1/xiJvqtCvH/dgREP/41XokycD/6fU1zSX4e/sdGh7rZI+jyfbpheSFuNiaSSGx/2g6QLZzuujVR2Q==
+"@shopify/hydrogen@2026.1.0":
+  version "2026.1.0"
+  resolved "https://registry.yarnpkg.com/@shopify/hydrogen/-/hydrogen-2026.1.0.tgz#e95d33b3072deed88d801f9545c14dd14ccbdd67"
+  integrity sha512-KMWI5FdkkMgIGtSObDGLLWapZvlnv4XDnKsTZD4TP1UpjEvTJKvzTYKlYKFNvzS/CY/OpEFVewgLiFlDo2diZA==
   dependencies:
-    "@shopify/hydrogen-react" "2025.1.4"
+    "@shopify/graphql-client" "1.4.1"
+    "@shopify/hydrogen-react" "2026.1.0"
     content-security-policy-builder "^2.2.0"
+    flame-chart-js "2.3.1"
     isbot "^5.1.21"
     source-map-support "^0.5.21"
     type-fest "^4.33.0"
@@ -3992,6 +4001,13 @@ clsx@^1.2.1:
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.2.1.tgz#0ddc4a20a549b59c93a4116bb26f5294ca17dc12"
   integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
 
+color-convert@^1.9.3:
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.3.tgz#bb71850690e1f136567de629d2d5471deda4c1e8"
+  integrity sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==
+  dependencies:
+    color-name "1.1.3"
+
 color-convert@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-2.0.1.tgz#72d3a68d598c9bdb3af2ad1e84f21d896abd4de3"
@@ -3999,10 +4015,31 @@ color-convert@^2.0.1:
   dependencies:
     color-name "~1.1.4"
 
-color-name@~1.1.4:
+color-name@1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
+  integrity sha512-72fSenhMw2HZMTVHeCA9KCmpEIbzWiQsjN+BHcBbS9vr1mtt+vJjPdksIBNUmKAW8TFUDPJK5SUU3QhE9NEXDw==
+
+color-name@^1.0.0, color-name@~1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
+
+color-string@^1.6.0:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/color-string/-/color-string-1.9.1.tgz#4467f9146f036f855b764dfb5bf8582bf342c7a4"
+  integrity sha512-shrVawQFojnZv6xM40anx4CkoDP+fZsw/ZerEMsW/pyzsRbElpsL/DBVW7q3ExxwusdNXI3lXpuhEZkzs8p5Eg==
+  dependencies:
+    color-name "^1.0.0"
+    simple-swizzle "^0.2.2"
+
+color@^3.1.3:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/color/-/color-3.2.1.tgz#3544dc198caf4490c3ecc9a790b54fe9ff45e164"
+  integrity sha512-aBl7dZI9ENN6fUGC7mWpMTPNHmWUSNan9tuWN6ahh5ZLNk9baLJOnSMlrQkHcrfFgz2/RigjUVAjdx36VcemKA==
+  dependencies:
+    color-convert "^1.9.3"
+    color-string "^1.6.0"
 
 colorette@^2.0.16:
   version "2.0.20"
@@ -5309,6 +5346,11 @@ event-target-shim@^5.0.0:
   resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-5.0.1.tgz#5d4d3ebdf9583d63a5333ce2deb7480ab2b05789"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
+events@^3.2.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
+  integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
+
 execa@5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/execa/-/execa-5.1.1.tgz#f80ad9cbf4298f7bd1d4c9555c21e93741c411dd"
@@ -5513,6 +5555,14 @@ find-up@^5.0.0:
   dependencies:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
+
+flame-chart-js@2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/flame-chart-js/-/flame-chart-js-2.3.1.tgz#7fdab3b158a2064ad746352d12aead7ebeec8545"
+  integrity sha512-wi3g+BEYEWcxnFrakPt7A/oXVfMnun6Uvjve3kfscXXCrgP6f1O8o5LOseXfHnVI1jxTWOINnzdXPN/NLw9guQ==
+  dependencies:
+    color "^3.1.3"
+    events "^3.2.0"
 
 flat-cache@^3.0.4:
   version "3.2.0"
@@ -6189,6 +6239,11 @@ is-arrayish@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.2.1.tgz#77c99840527aa8ecb1a8ba697b80645a7a926a9d"
   integrity sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg==
+
+is-arrayish@^0.3.1:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.3.4.tgz#1ee5553818511915685d33bb13d31bf854e5059d"
+  integrity sha512-m6UrgzFVUYawGBh1dUsWR5M2Clqic9RVXC/9f8ceNlv2IcO9j9J/z8UoCLPqtsPBFNzEpfR3xftohbfqDx8EQA==
 
 is-async-function@^2.0.0:
   version "2.1.1"
@@ -9296,6 +9351,13 @@ signal-exit@^4.0.1:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-4.1.0.tgz#952188c1cbd546070e2dd20d0f41c0ae0530cb04"
   integrity sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==
 
+simple-swizzle@^0.2.2:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/simple-swizzle/-/simple-swizzle-0.2.4.tgz#a8d11a45a11600d6a1ecdff6363329e3648c3667"
+  integrity sha512-nAu1WFPQSMNr2Zn9PGSZK9AGn4t/y97lEm+MXTtUDwfP0ksAIX4nO+6ruD9Jwut4C49SB1Ws+fbXsm/yScWOHw==
+  dependencies:
+    is-arrayish "^0.3.1"
+
 slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
@@ -10362,7 +10424,7 @@ urlpattern-polyfill@^4.0.3:
   resolved "https://registry.yarnpkg.com/urlpattern-polyfill/-/urlpattern-polyfill-4.0.3.tgz#c1fa7a73eb4e6c6a1ffb41b24cf31974f7392d3b"
   integrity sha512-DOE84vZT2fEcl9gqCUTcnAw5ZY5Id55ikUcziSUntuEFL3pRvavg5kwDmTEUJkeCHInTlV/HexFomgYnzO5kdQ==
 
-use-isomorphic-layout-effect@^1.0.0:
+use-isomorphic-layout-effect@1.2.1, use-isomorphic-layout-effect@^1.0.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/use-isomorphic-layout-effect/-/use-isomorphic-layout-effect-1.2.1.tgz#2f11a525628f56424521c748feabc2ffcc962fce"
   integrity sha512-tpZZ+EX0gaghDAiFR37hj5MgY6ZN55kLiPkJsKxBMZ6GZdOSPJXiOzPM984oPYZ5AnehYx5WQp1+ME8I/P/pRA==
@@ -10374,7 +10436,7 @@ use-resize-observer@^9.1.0:
   dependencies:
     "@juggle/resize-observer" "^3.3.1"
 
-use-sync-external-store@^1.0.0:
+use-sync-external-store@1.6.0, use-sync-external-store@^1.0.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.6.0.tgz#b174bfa65cb2b526732d9f2ac0a408027876f32d"
   integrity sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==
