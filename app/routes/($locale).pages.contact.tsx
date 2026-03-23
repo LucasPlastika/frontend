@@ -1,22 +1,16 @@
-import {useState} from 'react';
-import type {MetaFunction} from '@shopify/remix-oxygen';
-import {Link} from '~/components/Link';
-import {routeHeaders} from '~/data/cache';
+import { useState } from 'react';
+import type { MetaFunction } from '@shopify/remix-oxygen';
+import { Link } from '~/components/Link';
+import { routeHeaders } from '~/data/cache';
 
 export const headers = routeHeaders;
 
 export const meta: MetaFunction = () => [
-  {title: 'Fale Conosco | YASY'},
+  { title: 'Fale Conosco | YASY' },
   {
     name: 'description',
     content: 'Entre em contato com a YASY. Estamos aqui para ajudar.',
   },
-];
-
-const SOCIAL_LINKS = [
-  {name: 'Instagram', href: '#'},
-  {name: 'TikTok', href: '#'},
-  {name: 'Facebook', href: '#'},
 ];
 
 export default function ContactPage() {
@@ -31,7 +25,7 @@ export default function ContactPage() {
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) {
-    setForm((prev) => ({...prev, [e.target.name]: e.target.value}));
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -40,42 +34,44 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="bg-white min-h-screen">
-      <div className="mx-auto max-w-5xl px-6 py-12 lg:py-20">
-        <nav className="mb-8 text-sm text-gray-500">
-          <Link to="/" className="hover:text-black transition-colors">Home</Link>
-          <span className="mx-2">/</span>
-          <span className="text-black font-medium">Fale Conosco</span>
+    <div className="bg-secondary">
+      <div className="container mx-auto py-12 lg:py-20">
+        <nav className="mb-6 flex items-center gap-2 text-sm font-bold uppercase text-contrast">
+          <Link to="/" className="font-serif text-primary hover:text-contrast transition-colors">
+            Home
+          </Link>
+          <span className="text-primary">→</span>
+          <span className="font-serif text-contrast">Fale Conosco</span>
         </nav>
 
-        <h1 className="text-3xl font-bold text-black uppercase tracking-wider">
-          Fale Conosco
+        <h1 className="text-6xl lg:text-8xl font-sans-2 uppercase text-contrast">
+          Fale <span className="font-sans-2 text-primary">Conosco</span>
         </h1>
-        <p className="mt-3 text-gray-700 mb-10">
+        <p className="mt-3 text-contrast mb-12 text-2xl">
           Adoramos ouvir você. Envie sua mensagem e responderemos em até 2 dias úteis.
         </p>
 
-        <div className="grid gap-12 lg:grid-cols-2">
-          {/* Formulário */}
-          <div>
+        <div className="grid gap-8 w-full lg:grid-cols-3 items-start">
+          {/* Form card */}
+          <div className="rounded-3xl bg-contrast p-8 col-span-2 sm:p-10">
             {submitted ? (
-              <div className="rounded-2xl border border-gray-200 bg-gray-50 p-8 text-center">
-                <p className="text-lg font-bold text-black">
+              <div className="text-center py-12">
+                <p className="text-lg font-bold text-primary">
                   Mensagem enviada!
                 </p>
-                <p className="mt-2 text-sm text-gray-700">
+                <p className="mt-2 text-primary">
                   Obrigado pelo contato. Responderemos em breve.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
-                <div>
-                  <label
-                    htmlFor="contact-name"
-                    className="block text-sm font-bold text-black uppercase tracking-wider"
-                  >
-                    Nome
-                  </label>
+                <div className="relative">
+                  <img
+                    src="/icons/person.svg"
+                    alt=""
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5"
+                    aria-hidden="true"
+                  />
                   <input
                     id="contact-name"
                     type="text"
@@ -83,17 +79,17 @@ export default function ContactPage() {
                     required
                     value={form.name}
                     onChange={handleChange}
-                    placeholder="Seu nome completo"
-                    className="mt-2 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-black placeholder:text-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
+                    placeholder="Escreva seu nome aqui"
+                    className="w-full text-primary rounded-xl border border-contrast bg-white pl-12 pr-4 py-3 focus:border-contrast focus:outline-none transition-colors"
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor="contact-email"
-                    className="block text-sm font-bold text-black uppercase tracking-wider"
-                  >
-                    E-mail
-                  </label>
+                <div className="relative">
+                  <img
+                    src="/icons/email.svg"
+                    alt=""
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5"
+                    aria-hidden="true"
+                  />
                   <input
                     id="contact-email"
                     type="email"
@@ -101,116 +97,113 @@ export default function ContactPage() {
                     required
                     value={form.email}
                     onChange={handleChange}
-                    placeholder="seu@email.com"
-                    className="mt-2 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-black placeholder:text-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
+                    placeholder="Coloque seu e-mail aqui"
+                    className="w-full text-primary rounded-xl border border-contrast bg-white pl-12 pr-4 py-3 focus:border-contrast focus:outline-none transition-colors"
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor="contact-subject"
-                    className="block text-sm font-bold text-black uppercase tracking-wider"
-                  >
-                    Assunto
-                  </label>
+                <div className="relative">
                   <select
                     id="contact-subject"
                     name="subject"
                     required
                     value={form.subject}
                     onChange={handleChange}
-                    className="mt-2 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-black focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
+                    className="w-full appearance-none rounded-xl border border-contrast bg-white px-4 py-3 text-primary transition-colors"
                   >
-                    <option value="">Selecione um assunto</option>
-                    <option value="pedido">Dúvida sobre pedido</option>
-                    <option value="produto">Dúvida sobre produto</option>
-                    <option value="troca">Troca ou devolução</option>
-                    <option value="parceria">Proposta de parceria</option>
-                    <option value="outro">Outro</option>
+                    <option value="" className="text-primary">
+                      Selecione um assunto
+                    </option>
+                    <option value="pedido" className="text-primary">
+                      Dúvida sobre pedido
+                    </option>
+                    <option value="produto" className="text-primary">
+                      Dúvida sobre produto
+                    </option>
+                    <option value="troca" className="text-primary">
+                      Troca ou devolução
+                    </option>
+                    <option value="parceria" className="text-primary">
+                      Proposta de parceria
+                    </option>
+                    <option value="outro" className="text-primary">
+                      Outro
+                    </option>
                   </select>
-                </div>
-                <div>
-                  <label
-                    htmlFor="contact-message"
-                    className="block text-sm font-bold text-black uppercase tracking-wider"
+                  <svg
+                    className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-contrast"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    aria-hidden="true"
                   >
-                    Mensagem
-                  </label>
-                  <textarea
-                    id="contact-message"
-                    name="message"
-                    rows={5}
-                    required
-                    value={form.message}
-                    onChange={handleChange}
-                    placeholder="Como podemos ajudar?"
-                    className="mt-2 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-black placeholder:text-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
-                  />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                  </svg>
                 </div>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  rows={5}
+                  required
+                  value={form.message}
+                  onChange={handleChange}
+                  placeholder="Escreva a mensagem aqui para podermos ajudá-lo..."
+                  className="w-full rounded-xl text-primary border border-contrast bg-white px-4 py-3 text-contrast -contrast focus:outline-none transition-colors resize-none"
+                />
                 <button
                   type="submit"
-                  className="w-full rounded-xl bg-black px-8 py-3.5 text-sm font-bold text-white uppercase tracking-wider hover:bg-gray-800 transition-colors sm:w-auto"
+                  className="w-full text-2xl font-sans-2 rounded-full bg-primary px-8 py-3.5 font-bold text-contrast uppercase hover:opacity-90 transition-opacity"
                 >
-                  Enviar Mensagem
+                  Enviar Mensagem →
                 </button>
               </form>
             )}
           </div>
 
-          {/* Informações */}
-          <div className="space-y-8">
+          {/* Info card */}
+          <div className="rounded-3xl bg-primary p-8 sm:p-10 text-contrast space-y-6">
             <div>
-              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-500">
-                E-mail
-              </h3>
+              <h3 className="font-bold">E-mail</h3>
               <a
                 href="mailto:contato@yasy.com.br"
-                className="mt-2 block text-black font-bold hover:underline"
+                className="mt-1 block text-contrast hover:text-contrast transition-colors"
               >
                 contato@yasy.com.br
               </a>
             </div>
             <div>
-              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-500">
-                Redes Sociais
-              </h3>
-              <div className="mt-2 flex gap-4">
-                {SOCIAL_LINKS.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-black font-bold hover:underline"
-                  >
-                    {link.name}
-                  </a>
-                ))}
-              </div>
+              <h3 className="font-bold">Redes sociais</h3>
+              <p className="mt-1 text-contrast">
+                Instagram · TikTok · Facebook
+              </p>
             </div>
             <div>
-              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-500">
-                Horário de Atendimento
-              </h3>
-              <p className="mt-2 text-black">
+              <h3 className="font-bold">Horário de atendimento</h3>
+              <p className="mt-1 text-contrast">
                 Segunda a Sexta, 9h às 18h (horário de Brasília)
               </p>
             </div>
             <div>
-              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-500">
-                Links Úteis
-              </h3>
-              <div className="mt-2 flex flex-col gap-2">
-                <Link to="/pages/faq" className="text-black font-bold hover:underline">
-                  Dúvidas Frequentes
+              <h3 className="font-bold">Links úteis</h3>
+              <div className="mt-1 flex flex-col gap-1">
+                <Link
+                  to="/pages/faq"
+                  className="text-contrast hover:text-contrast transition-colors"
+                >
+                  Dúvidas frequentes →
                 </Link>
-                <Link to="/policies/shipping-policy" className="text-black font-bold hover:underline">
-                  Envio e Devoluções
+                <Link
+                  to="/policies/shipping-policy"
+                  className="text-contrast hover:text-contrast transition-colors"
+                >
+                  Envio e devoluções →
                 </Link>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <div className="top-curve-lg h-24 bg-[#0B1215]" />
     </div>
   );
 }

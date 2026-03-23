@@ -1,16 +1,14 @@
-import {Link} from '~/components/Link';
-
 export function StoryTeaser() {
   return (
-    <section className="bg-gray-900 py-16 lg:py-24">
-      <div className="mx-auto max-w-4xl px-6 text-center">
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white uppercase tracking-wide leading-tight">
-          Sabor ou Saúde?
+    <section className="bg-primary py-16">
+      <div className="container mx-auto text-center">
+        <h2 className="text-4xl lg:text-6xl font-serif uppercase">
+          <span className="text-secondary font-serif">Sabor ou Saúde?</span>
           <br />
-          <span className="text-gray-400">Os Dois!</span>
+          <span className="text-contrast font-serif">Os Dois!</span>
         </h2>
 
-        <div className="mt-10 space-y-6 text-gray-300 text-base sm:text-lg leading-relaxed max-w-3xl mx-auto">
+        <div className="mt-10 text-contrast text-base sm:text-lg leading-relaxed max-w-3xl mx-auto">
           <p>
             A gente sabe como é. A vontade de comer algo delicioso, que abraça a
             alma, mas surge aquela voz que diz: &ldquo;será que eu
@@ -24,8 +22,8 @@ export function StoryTeaser() {
           </p>
         </div>
 
-        <blockquote className="mt-10 mx-auto max-w-2xl border border-gray-700 rounded-2xl p-6 sm:p-8 bg-gray-800/50">
-          <p className="text-gray-200 italic text-sm sm:text-base leading-relaxed">
+        <blockquote className="mt-10 mx-auto max-w-2xl rounded-[32px] border-l-4 border-contrast bg-contrast/5 p-6 aos-init aos-animate">
+          <p className="text-contrast italic text-sm sm:text-base leading-relaxed">
             &ldquo;YASY é seu respiro gostoso. Aquele momento em que sorrisos e
             saúde andam de mãos dadas, sem neura, sem culpa. A gente transforma
             cuidado em alegria para você e todos ao seu redor. Simples
@@ -33,12 +31,37 @@ export function StoryTeaser() {
           </p>
         </blockquote>
 
-        <Link
-          to="/pages/about"
-          className="mt-10 inline-block text-white font-bold uppercase tracking-wider text-sm border-b-2 border-white pb-1 hover:text-gray-400 hover:border-gray-400 transition-colors"
-        >
-          Conheça Nossa História →
-        </Link>
+        <div className="flex mt-12 w-full items-start gap-4">
+          <div className="flex w-full flex-col gap-4">
+            <img
+              src="/images/smile-1.png"
+              alt="Pessoa sorrindo"
+              className="w-full h-[320px] object-cover rounded-2xl"
+              loading="lazy"
+            />
+            <img
+              src="/images/smile-2.png"
+              alt="Amigos rindo juntos"
+              className="w-full h-[255px] object-cover rounded-2xl"
+              loading="lazy"
+            />
+          </div>
+
+          <div className="flex w-full flex-col gap-4">
+            <img
+              src="/images/smile-3.png"
+              alt="Casal feliz"
+              className="w-full h-[255px] object-cover rounded-2xl"
+              loading="lazy"
+            />
+            <img
+              src="/images/smile-4.png"
+              alt="Grupo de amigos com snacks"
+              className="w-full h-[320px] object-cover rounded-2xl"
+              loading="lazy"
+            />
+          </div>
+        </div>
       </div>
     </section>
   );

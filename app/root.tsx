@@ -31,6 +31,7 @@ import {NotFound} from '~/components/NotFound';
 import favicon from '~/assets/favicon.svg';
 import {seoPayload} from '~/lib/seo.server';
 import styles from '~/styles/app.css?url';
+import customFonts from '~/styles/custom-font.css?url';
 
 import {DEFAULT_LOCALE, parseMenu} from './lib/utils';
 
@@ -157,6 +158,7 @@ function Layout({children}: {children?: React.ReactNode}) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="stylesheet" href={customFonts}></link>
         <link rel="stylesheet" href={styles}></link>
         <Meta />
         <Links />

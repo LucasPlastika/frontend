@@ -54,25 +54,26 @@ const BENEFITS: Benefit[] = [
 
 export function BenefitsGrid() {
   return (
-    <section className="bg-gray-900 py-16 lg:py-20">
-      <div className="mx-auto max-w-6xl px-6">
-        <h2 className="text-2xl sm:text-3xl font-bold text-white text-center uppercase tracking-wider mb-12">
-          Por Que YASY?
+    <section className="bg-primary pb-16">
+      <div className="mx-auto container">
+        <h2 className="text-center text-4xl lg:text-6xl uppercase mb-12">
+          <span className="text-contrast font-serif">YASY é a melhor opção </span>
+          <span className="text-secondary font-serif">para a sua rotina!</span>
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {BENEFITS.map((benefit) => (
             <div
               key={benefit.title}
-              className="bg-gray-800 rounded-2xl p-6 text-center flex flex-col items-center gap-3 hover:bg-gray-700 transition-colors"
+              className="bg-contrast/[12%] rounded-2xl p-6 text-center flex flex-col items-center gap-3"
             >
-              <div className="w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center text-white">
+              <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center text-contrast shadow-lg">
                 {benefit.icon}
               </div>
               <div>
-                <span className="block text-xs text-gray-400 uppercase tracking-wider">
+                <span className="block text-contrast uppercase tracking-wider">
                   {benefit.label}
                 </span>
-                <span className="block text-sm font-bold text-white uppercase tracking-wider mt-0.5">
+                <span className="block font-bold text-contrast uppercase tracking-wider mt-0.5">
                   {benefit.title}
                 </span>
               </div>

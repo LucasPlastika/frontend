@@ -299,9 +299,8 @@ function CartLineItem({line}: {line: CartLine}) {
         {merchandise.image && (
           <Image
             width={110}
-            height={110}
             data={merchandise.image}
-            className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-28"
+            className="object-contain object-center w-24 h-24 md:w-28 md:h-28"
             alt={merchandise.title}
           />
         )}
@@ -319,13 +318,13 @@ function CartLineItem({line}: {line: CartLine}) {
             )}
           </Heading>
 
-          <div className="grid pb-2">
+          {/* <div className="grid pb-2">
             {(merchandise?.selectedOptions || []).map((option) => (
               <Text color="subtle" key={option.name}>
                 {option.name}: {option.value}
               </Text>
             ))}
-          </div>
+          </div> */}
 
           <div className="flex items-center gap-2">
             <div className="flex justify-start text-copy">

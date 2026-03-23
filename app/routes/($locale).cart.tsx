@@ -1,22 +1,22 @@
-import {useLoaderData} from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 import {
   type LoaderFunctionArgs,
   type ActionFunctionArgs,
   json,
 } from '@shopify/remix-oxygen';
-import {CartForm, type CartQueryDataReturn, Analytics} from '@shopify/hydrogen';
+import { CartForm, type CartQueryDataReturn, Analytics } from '@shopify/hydrogen';
 
-import {isLocalPath} from '~/lib/utils';
-import {Cart} from '~/components/Cart';
-import {Link} from '~/components/Link';
+import { isLocalPath } from '~/lib/utils';
+import { Cart } from '~/components/Cart';
+import { Link } from '~/components/Link';
 
-export async function action({request, context}: ActionFunctionArgs) {
-  const {cart} = context;
+export async function action({ request, context }: ActionFunctionArgs) {
+  const { cart } = context;
 
   const formData = await request.formData();
 
-  const {action, inputs} = CartForm.getFormInput(formData);
+  const { action, inputs } = CartForm.getFormInput(formData);
   invariant(action, 'No cartAction defined');
 
   let status = 200;
@@ -66,7 +66,7 @@ export async function action({request, context}: ActionFunctionArgs) {
     headers.set('Location', redirectTo);
   }
 
-  const {cart: cartResult, errors, userErrors} = result;
+  const { cart: cartResult, errors, userErrors } = result;
 
   return json(
     {
@@ -74,12 +74,12 @@ export async function action({request, context}: ActionFunctionArgs) {
       userErrors,
       errors,
     },
-    {status, headers},
+    { status, headers },
   );
 }
 
-export async function loader({context}: LoaderFunctionArgs) {
-  const {cart} = context;
+export async function loader({ context }: LoaderFunctionArgs) {
+  const { cart } = context;
   return json(await cart.get());
 }
 
@@ -87,19 +87,22 @@ export default function CartRoute() {
   const cart = useLoaderData<typeof loader>();
 
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-12">
-      <nav className="mb-6 text-sm text-gray-500">
-        <Link to="/" className="hover:text-black transition-colors">
-          Home
-        </Link>
-        <span className="mx-2">/</span>
-        <span className="text-black font-medium">Carrinho</span>
-      </nav>
+    <div>
+      <div className="max-w-7xl min-h-screen mx-auto px-6 md:px-8 lg:px-12 py-12">
+        <nav className="mb-6 text-sm text-gray-500">
+          <Link to="/" className="text-primary opacity-70 hover:opacity-100 transition-colors">
+            Home
+          </Link>
+          <span className="mx-2">/</span>
+          <span className="text-primary font-medium">Sacola</span>
+        </nav>
 
-      <h1 className="text-3xl font-bold text-black mb-8">Carrinho</h1>
+        <h1 className="text-3xl font-bold text-primary mb-8">Sacola</h1>
 
-      <Cart layout="page" cart={cart} />
-      <Analytics.CartView />
+        <Cart layout="page" cart={cart} />
+        <Analytics.CartView />
+      </div>
+      <div className="top-curve-lg h-24 bg-[#0B1215]" />
     </div>
   );
 }

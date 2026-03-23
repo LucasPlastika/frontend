@@ -1,59 +1,118 @@
+import {useState, useCallback, useEffect} from 'react';
 import {Image} from '@shopify/hydrogen';
+import useEmblaCarousel from 'embla-carousel-react';
+import clsx from 'clsx';
 
-import type {MediaFragment} from 'storefrontapi.generated';
+type GalleryImage = {
+  id?: string;
+  url: string;
+  altText?: string | null;
+  width?: number;
+  height?: number;
+};
 
-/**
- * A client component that defines a media gallery for hosting images, 3D models, and videos of products
- */
 export function ProductGallery({
-  media,
-  className,
+  images,
+  title,
 }: {
-  media: MediaFragment[];
-  className?: string;
+  images: GalleryImage[];
+  title: string;
 }) {
-  if (!media.length) {
-    return null;
-  }
+  const [mainRef, mainApi] = useEmblaCarousel(
+    {loop: false},
+  );
+  const [thumbRef] = useEmblaCarousel({
+    containScroll: 'keepSnaps',
+    dragFree: true,
+  });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const onThumbClick = useCallback(
+    (index: number) => mainApi?.scrollTo(index),
+    [mainApi],
+  );
+
+  useEffect(() => {
+    if (!mainApi) return;
+    const onSelect = () => setSelectedIndex(mainApi.selectedScrollSnap());
+    mainApi.on('select', onSelect);
+    onSelect();
+    return () => {
+      mainApi.off('select', onSelect);
+    };
+  }, [mainApi]);
+
+  if (!images.length) return null;
 
   return (
-    <div
-      className={`swimlane md:grid-flow-row hiddenScroll md:p-0 md:overflow-x-auto md:grid-cols-2 ${className}`}
-    >
-      {media.map((med, i) => {
-        const isFirst = i === 0;
-        const isFourth = i === 3;
-        const isFullWidth = i % 3 === 0;
+    <div className="space-y-3">
+      <div className="overflow-hidden rounded-2xl" ref={mainRef}>
+        <div className="flex gap-4">
+          {images.map((img, i) => {
+            const isContain = isContainImage(img, i);
+            return (
+              <div
+                key={img.id ?? i}
+                className={clsx(
+                  'flex-[0_0_100%] min-w-0 overflow-hidden rounded-2xl h-[600px]',
+                  isContain
+                    ? 'bg-contrast flex items-center justify-center p-6'
+                    : '',
+                )}
+              >
+                <Image
+                  className={clsx(
+                    'w-full',
+                    isContain
+                      ? 'max-h-full max-w-full object-contain'
+                      : 'object-cover rounded-2xl',
+                  )}
+                  data={img}
+                  alt={img.altText || `${title} - ${i + 1}`}
+                  sizes="(min-width: 64em) 50vw, 100vw"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
-        const image =
-          med.__typename === 'MediaImage'
-            ? {...med.image, altText: med.alt || 'Product image'}
-            : null;
-
-        const style = [
-          isFullWidth ? 'md:col-span-2' : 'md:col-span-1',
-          isFirst || isFourth ? '' : 'md:aspect-[4/5]',
-          'aspect-square snap-center card-image bg-white dark:bg-contrast/10 w-mobileGallery md:w-full',
-        ].join(' ');
-
-        return (
-          <div className={style} key={med.id || image?.id}>
-            {image && (
-              <Image
-                loading={i === 0 ? 'eager' : 'lazy'}
-                data={image}
-                aspectRatio={!isFirst && !isFourth ? '4/5' : undefined}
-                sizes={
-                  isFirst || isFourth
-                    ? '(min-width: 48em) 60vw, 90vw'
-                    : '(min-width: 48em) 30vw, 90vw'
-                }
-                className="object-cover w-full h-full aspect-square fadeIn"
-              />
-            )}
+      {images.length > 1 && (
+        <div className="overflow-hidden" ref={thumbRef}>
+          <div className="flex gap-3">
+            {images.map((img, i) => {
+              const isContain = isContainImage(img, i);
+              return (
+                <button
+                  key={img.id ?? `thumb-${i}`}
+                  onClick={() => onThumbClick(i)}
+                  className={clsx(
+                    'flex-[0_0_auto] w-24 h-24 rounded-xl overflow-hidden border-2 border-transparent opacity-60 hover:opacity-90 transition-all flex items-center justify-center',
+                    isContain && 'bg-contrast p-2',
+                    selectedIndex === i && 'border-primary !opacity-100',
+                  )}
+                >
+                  <Image
+                    className={clsx(
+                      'max-h-full max-w-full',
+                      isContain ? 'object-contain' : 'object-cover',
+                    )}
+                    data={img}
+                    alt={img.altText || `${title} miniatura ${i + 1}`}
+                    sizes="96px"
+                    loading="lazy"
+                  />
+                </button>
+              );
+            })}
           </div>
-        );
-      })}
+        </div>
+      )}
     </div>
   );
+}
+
+function isContainImage(img: GalleryImage, index: number): boolean {
+  return !img.altText?.includes("product-gallery-full-size")
 }

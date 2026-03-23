@@ -1,8 +1,29 @@
-import {defineConfig} from 'vite';
+import path from 'node:path';
+import {defineConfig, type ViteDevServer} from 'vite';
 import {hydrogen} from '@shopify/hydrogen/vite';
 import {oxygen} from '@shopify/mini-oxygen/vite';
 import {vitePlugin as remix} from '@remix-run/dev';
 import tsconfigPaths from 'vite-tsconfig-paths';
+
+function tailwindHMR(): import('vite').Plugin {
+  return {
+    name: 'tailwind-hmr',
+    enforce: 'post',
+    handleHotUpdate({file, server}: {file: string; server: ViteDevServer}) {
+      if (file.match(/\.(tsx?|jsx?)$/)) {
+        const cssPath = path.resolve(server.config.root, 'app/styles/app.css');
+        const cssModules = server.moduleGraph.getModulesByFile(cssPath);
+        if (cssModules) {
+          const modules = [...cssModules];
+          modules.forEach((mod) => {
+            server.moduleGraph.invalidateModule(mod);
+          });
+          server.ws.send({type: 'full-reload'});
+        }
+      }
+    },
+  };
+}
 
 export default defineConfig({
   plugins: [
@@ -18,6 +39,7 @@ export default defineConfig({
       },
     }),
     tsconfigPaths(),
+    tailwindHMR(),
   ],
   ssr: {
     optimizeDeps: {

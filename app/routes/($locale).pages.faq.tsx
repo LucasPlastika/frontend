@@ -1,13 +1,12 @@
-import type {MetaFunction} from '@shopify/remix-oxygen';
-import {Disclosure} from '@headlessui/react';
-import {Link} from '~/components/Link';
-import {IconCaret} from '~/components/Icon';
-import {routeHeaders} from '~/data/cache';
+import { useState } from 'react';
+import type { MetaFunction } from '@shopify/remix-oxygen';
+import { Link } from '~/components/Link';
+import { routeHeaders } from '~/data/cache';
 
 export const headers = routeHeaders;
 
 export const meta: MetaFunction = () => [
-  {title: 'Dúvidas Frequentes | YASY'},
+  { title: 'Dúvidas Frequentes | YASY' },
   {
     name: 'description',
     content:
@@ -123,75 +122,103 @@ const FAQ_SECTIONS: FAQSection[] = [
   },
 ];
 
-export default function FAQPage() {
+function FAQAccordion({ items }: { items: FAQItem[] }) {
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+
   return (
-    <div className="bg-white min-h-screen">
-      <div className="mx-auto max-w-3xl px-6 py-12 lg:py-20">
-        <nav className="mb-8 text-sm text-gray-500">
-          <Link to="/" className="hover:text-black transition-colors">Home</Link>
-          <span className="mx-2">/</span>
-          <span className="text-black font-medium">Dúvidas Frequentes</span>
-        </nav>
-
-        <h1 className="text-3xl font-bold text-black uppercase tracking-wider">
-          Dúvidas Frequentes
-        </h1>
-        <p className="mt-3 text-gray-700 mb-10">
-          Tudo que você precisa saber sobre a YASY.
-        </p>
-
-        {FAQ_SECTIONS.map((section, sectionIdx) => (
-          <div key={section.title}>
-            <h2
-              className={`text-lg font-bold text-black uppercase tracking-wider mb-4 ${
-                sectionIdx === 0 ? '' : 'mt-10'
-              }`}
+    <div>
+      {items.map((faq, i) => {
+        const isOpen = openIdx === i;
+        return (
+          <div key={faq.question} className="border-b border-contrast/20">
+            <button
+              onClick={() => setOpenIdx(isOpen ? null : i)}
+              className="flex w-full items-center justify-between py-4 text-left"
             >
-              {section.title}
-            </h2>
-            <div>
-              {section.items.map((faq) => (
-                <Disclosure key={faq.question}>
-                  {({open}) => (
-                    <div className="border-b border-gray-200">
-                      <Disclosure.Button className="flex w-full items-center justify-between py-4 text-left text-sm font-bold text-black">
-                        {faq.question}
-                        <IconCaret
-                          direction={open ? 'up' : 'down'}
-                          className="ml-4 h-4 w-4 flex-shrink-0 text-gray-500"
-                        />
-                      </Disclosure.Button>
-                      <div
-                        className={`${
-                          open ? 'max-h-96 pb-4' : 'max-h-0'
-                        } overflow-hidden transition-all duration-300`}
-                      >
-                        <Disclosure.Panel static>
-                          <p className="text-sm leading-relaxed text-gray-700">
-                            {faq.answer}
-                          </p>
-                        </Disclosure.Panel>
-                      </div>
-                    </div>
-                  )}
-                </Disclosure>
-              ))}
+              <span className="text-lg text-contrast">{faq.question}</span>
+              <svg
+                className={`ml-4 h-4 w-4 flex-shrink-0 text-contrast/60 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''
+                  }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="rgb(var(--color-primary))"
+                strokeWidth={2}
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                />
+              </svg>
+            </button>
+            <div
+              className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                }`}
+            >
+              <div className="overflow-hidden">
+                <p className="pb-4 text-lg leading-relaxed text-contrast">
+                  {faq.answer}
+                </p>
+              </div>
             </div>
           </div>
-        ))}
+        );
+      })}
+    </div>
+  );
+}
 
-        <div className="mt-14 text-center">
-          <p className="text-lg font-bold text-black">
+export default function FAQPage() {
+  return (
+    <>
+      <div className="bg-primary">
+        <div className="bottom-curve bg-secondary">
+          <div className="container py-12 lg:py-20 mb-24 mx-auto">
+            <nav className="mb-6 flex items-center gap-2 text-sm font-bold uppercase text-contrast">
+              <Link to="/" className="font-serif text-primary hover:text-contrast transition-colors">
+                Home
+              </Link>
+              <span className="text-primary">→</span>
+              <Link to="/pages/faq" className="font-serif text-contrast transition-colors">
+                Dúvidas Frequentes
+              </Link>
+            </nav>
+
+            <h1 className="text-6xl lg:text-8xl font-sans-2 uppercase text-contrast">
+              Dúvidas <span className="font-sans-2 text-primary">Frequentes</span>
+            </h1>
+
+            <p className="mt-3 text-contrast mb-12 text-2xl">
+              Tudo que você precisa saber sobre a YASY.
+            </p>
+
+            {FAQ_SECTIONS.map((section, sectionIdx) => (
+              <div key={section.title} className={sectionIdx === 0 ? '' : 'mt-10'}>
+                <h2 className="text-3xl font-sans-2 text-contrast uppercase mb-2">
+                  {section.title}
+                </h2>
+                <FAQAccordion items={section.items} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-primary">
+        <div className="flex flex-col items-center gap-6 px-6 py-32">
+          <p className="text-6xl lg:text-8xl font-sans-2 text-contrast uppercase text-center">
             Ainda tem dúvidas?
           </p>
           <Link
             to="/pages/contact"
-            className="mt-3 inline-block text-sm font-bold uppercase tracking-wider text-black border-b-2 border-black pb-1 hover:text-gray-600 hover:border-gray-600 transition-colors"
+            className="rounded-full border-2 border-contrast px-10 py-3 text-xs font-bold text-contrast uppercase tracking-widest hover:bg-contrast hover:text-secondary transition-colors"
           >
-            Fale Conosco →
+            Fale Conosco
           </Link>
         </div>
+        <div className="top-curve-lg h-24 bg-[#0B1215]" />
       </div>
-    </div>
+    </>
   );
 }

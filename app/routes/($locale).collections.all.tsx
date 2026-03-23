@@ -1,11 +1,11 @@
 import {json, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useLoaderData} from '@remix-run/react';
-import {flattenConnection, Image, Money} from '@shopify/hydrogen';
-import type {MoneyV2} from '@shopify/hydrogen/storefront-api-types';
+import {useState, useMemo} from 'react';
 import type {ProductCardFragment} from 'storefrontapi.generated';
 import {Link} from '~/components/Link';
+import {ProductCard} from '~/components/ProductCard';
+import {TagButton} from '~/components/TagButton';
 import {PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
-import {isDiscounted} from '~/lib/utils';
 
 export const meta = () => {
   return [
@@ -31,89 +31,77 @@ export async function loader({context}: LoaderFunctionArgs) {
   return json({products: products.nodes});
 }
 
-function ProductCard({product}: {product: ProductCardFragment}) {
-  const firstVariant = flattenConnection(product.variants)[0];
-  if (!firstVariant) return null;
+type Filter = 'all' | 'saquinho' | 'lata';
 
-  const {image, price, compareAtPrice} = firstVariant;
+const FILTERS: {label: string; value: Filter; tag: string}[] = [
+  {label: 'Todos', value: 'all', tag: ''},
+  {label: 'Saquinho 50g', value: 'saquinho', tag: 'Saquinho 50g'},
+  {label: 'Lata Premium 100g', value: 'lata', tag: 'LATA PREMIUM 100g'},
+];
 
-  return (
-    <Link
-      to={`/products/${product.handle}`}
-      className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-lg transition-shadow"
-    >
-      <div className="relative">
-        {isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2) && (
-          <span className="absolute top-3 right-3 z-10 bg-black text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
-            Oferta
-          </span>
-        )}
-        <div className="aspect-square bg-gray-100 flex items-center justify-center p-6 overflow-hidden">
-          {image && (
-            <Image
-              className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
-              data={image}
-              alt={image.altText || product.title}
-              sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
-              loading="lazy"
-            />
-          )}
-        </div>
-      </div>
-
-      <div className="p-5 space-y-3">
-        <h2 className="font-bold text-base text-black leading-tight">
-          {product.title}
-        </h2>
-
-        <div className="flex items-baseline gap-2">
-          <span className="text-black font-bold text-lg">
-            <Money withoutTrailingZeros data={price!} />
-          </span>
-          {isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2) && (
-            <span className="text-gray-400 text-sm line-through">
-              <Money withoutTrailingZeros data={compareAtPrice as MoneyV2} />
-            </span>
-          )}
-        </div>
-
-        <span className="inline-block w-full text-center text-xs font-bold uppercase tracking-wider bg-black text-white py-3 rounded-lg group-hover:bg-gray-800 transition-colors">
-          Ver Produto
-        </span>
-      </div>
-    </Link>
-  );
+function hasTag(product: ProductCardFragment, tag: string): boolean {
+  const tags = (product as any).tags as string[] | undefined;
+  return tags?.some((t) => t.toLowerCase() === tag.toLowerCase()) ?? false;
 }
 
 export default function ShopAll() {
   const {products} = useLoaderData<typeof loader>();
+  const [activeFilter, setActiveFilter] = useState<Filter>('all');
+
+  const filtered = useMemo(() => {
+    if (activeFilter === 'all') return products;
+    const match = FILTERS.find((f) => f.value === activeFilter);
+    if (!match) return products;
+    return products.filter((p: ProductCardFragment) => hasTag(p, match.tag));
+  }, [products, activeFilter]);
 
   return (
-    <div className="bg-white min-h-screen">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <nav className="mb-8 text-sm text-gray-500">
-          <Link to="/" className="hover:text-black transition-colors">
+    <div className="bg-secondary min-h-screen">
+      <div className="container mx-auto py-10 lg:py-14">
+        <nav className="mb-6 flex items-center gap-2 text-sm font-bold uppercase text-contrast">
+          <Link to="/" className="font-serif text-primary hover:text-contrast transition-colors">
             Home
           </Link>
-          <span className="mx-2">/</span>
-          <span className="text-black font-medium">Produtos</span>
+          <span className="text-primary">→</span>
+          <span className="font-serif text-contrast">Todos os Produtos</span>
         </nav>
 
-        <div className="mb-10">
-          <h1 className="text-3xl font-bold text-black uppercase tracking-wider">
-            Nossos Produtos
+        <div className="my-8">
+          <h1 className="text-5xl lg:text-6xl font-extrabold uppercase">
+            <span className="font-sans-2 text-primary">Todos </span>
+            <span className="font-sans-2 text-contrast">os Produtos</span>
           </h1>
-          <p className="mt-3 text-gray-700 max-w-2xl">
-            Pipoca gourmet zero açúcar. Indulgência saudável em cada mordida.
+          <p className="text-contrast text-2xl">
+            Pipoca gourmet zero açúcar em dois sabores incríveis e dois
+            formatos. Escolha o seu favorito.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product: ProductCardFragment) => (
+        <div className="mb-10 flex flex-wrap gap-2">
+          {FILTERS.map((f) => (
+            <TagButton
+              key={f.value}
+              active={activeFilter === f.value}
+              onClick={() => setActiveFilter(f.value)}
+            >
+              {f.label}
+            </TagButton>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {filtered.map((product: ProductCardFragment) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
+
+        {filtered.length === 0 && (
+          <p className="mt-12 text-center text-contrast/60 text-lg">
+            Nenhum produto encontrado nessa categoria.
+          </p>
+        )}
       </div>
+      <div className="top-curve-lg h-48 bg-[#0B1215]" />
     </div>
   );
 }

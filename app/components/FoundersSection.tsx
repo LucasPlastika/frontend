@@ -1,254 +1,181 @@
-import {useState} from 'react';
+"use client";
 
-function PersonPlaceholder() {
-  return (
-    <div
-      className="bg-gray-200 rounded-xl aspect-square w-full flex items-center justify-center"
-      aria-hidden="true"
-    >
-      <svg
-        className="w-16 h-16 text-gray-500"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.5}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-        />
-      </svg>
-    </div>
-  );
-}
+import { useCallback, useEffect, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import FloatingStar from "./FloatingStar";
 
-function AvatarPlaceholder() {
-  return (
-    <div
-      className="bg-gray-300 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0"
-      aria-hidden="true"
-    >
-      <svg
-        className="w-6 h-6 text-gray-500"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.5}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-        />
-      </svg>
-    </div>
-  );
-}
-
-function StarIcon() {
-  return (
-    <svg
-      className="w-10 h-10 text-gray-500"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M12 2L9.5 9.5L2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2Z" />
-    </svg>
-  );
-}
-
-const QUOTES = [
+const founders = [
   {
-    text: 'A YASY é o meu convite para a gente ser feliz junto, celebrando a vida real, sem neuras e com muito sabor. É a prova de que cuidar de si pode ser o',
-    highlight: 'momento mais gostoso do seu dia.',
-    author: 'Yasmin Castilho',
+    photo: "/images/yasmin-founder.png",
+    name: "Yasmin Castilho",
+    role: "A alma",
+    description:
+      `A YASY é o coração da Yasmin em forma de marca. Ela personifica
+      <strong class="font-bold">a leveza, a alegria e a busca por um bem-estar real,</strong> sem filtros.
+      Não é sobre vender um produto, é sobre compartilhar um estilo de vida onde ser feliz é fácil.`
   },
   {
-    text: 'O desafio é o mesmo: provar que saudável pode ser extremamente delicioso.',
-    highlight: 'Estamos elevando o padrão do mercado.',
-    author: 'Lucas Castro',
+    photo: "/images/lucas-founder.png",
+    name: "Lucas Castro",
+    role: "O Mestre Criador",
+    description:
+      `O gênio por trás do sabor. Lucas é o fundador da Dr. Peanut e a mente que garante a
+      <strong class="font-bold">qualidade e a inovação em cada detalhe.</strong>
+      Sua obsessão por excelência é o que torna a pipoca YASY uma experiência única e inigualável.
+      `
   },
 ];
 
-function ArrowButton({
-  direction,
-  onClick,
-}: {
-  direction: 'left' | 'right';
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      aria-label={direction === 'left' ? 'Citação anterior' : 'Próxima citação'}
-      className="w-10 h-10 rounded-full border border-gray-500 text-gray-400 flex items-center justify-center hover:border-white hover:text-white transition-colors flex-shrink-0"
-    >
-      <svg
-        className="w-5 h-5"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        aria-hidden="true"
-      >
-        {direction === 'left' ? (
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-        ) : (
-          <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-        )}
-      </svg>
-    </button>
-  );
-}
-
-function QuotesCarousel() {
-  const [current, setCurrent] = useState(0);
-
-  function prev() {
-    setCurrent((c) => (c === 0 ? QUOTES.length - 1 : c - 1));
-  }
-
-  function next() {
-    setCurrent((c) => (c === QUOTES.length - 1 ? 0 : c + 1));
-  }
-
-  const quote = QUOTES[current];
-
-  return (
-    <div className="bg-gray-800 py-14 lg:py-16">
-      <div className="mx-auto max-w-4xl px-6">
-        <div className="flex items-center gap-6 sm:gap-10">
-          <ArrowButton direction="left" onClick={prev} />
-
-          <div className="flex-1 text-center min-h-[160px] flex flex-col items-center justify-center">
-            <blockquote className="text-gray-200 text-lg sm:text-xl leading-relaxed italic max-w-3xl mx-auto">
-              &ldquo;{quote.text}{' '}
-              <strong className="text-white font-bold not-italic">
-                {quote.highlight}
-              </strong>
-              &rdquo;
-            </blockquote>
-            <div className="mt-6 flex items-center justify-center gap-3">
-              <AvatarPlaceholder />
-              <span className="text-white font-bold text-sm">
-                {quote.author}
-              </span>
-            </div>
-          </div>
-
-          <ArrowButton direction="right" onClick={next} />
-        </div>
-
-        {/* Dots */}
-        <div className="mt-6 flex justify-center gap-2">
-          {QUOTES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrent(i)}
-              aria-label={`Ir para citação ${i + 1}`}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                i === current ? 'bg-white' : 'bg-gray-600'
-              }`}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
+const quotes = [
+  {
+    text: "A YASY é o meu convite para a gente ser feliz junto, celebrando a vida real, sem neuras e com muito sabor. É a prova de que cuidar de si pode ser o momento mais gostoso do seu dia.",
+    avatar: "/images/yasmin-founder.png",
+    author: "Yasmin Castilho",
+  },
+  {
+    text: "A YASY une o que eu sei fazer de melhor — criar produtos que as pessoas amam de verdade — com um propósito maior. Cada detalhe é pensado para provar que qualidade e bem-estar podem andar juntos, sem abrir mão do sabor.",
+    avatar: "/images/lucas-founder.png",
+    author: "Lucas Castro",
+  },
+];
 
 export function FoundersSection() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, dragFree: false });
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+  const scrollTo = useCallback((index: number) => emblaApi?.scrollTo(index), [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    emblaApi.on("select", onSelect);
+    onSelect();
+    return () => { emblaApi.off("select", onSelect); };
+  }, [emblaApi]);
+
   return (
-    <section className="bg-gray-100">
-      {/* Founders + Header */}
-      <div className="py-16 lg:py-24">
-        <div className="mx-auto max-w-5xl px-6">
-          {/* Title & description */}
-          <div className="text-center mb-14">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-black uppercase tracking-wide leading-tight italic">
-              União de Propósito,
-              <br />
-              <span className="text-gray-500">Expertise e Gestão</span>
-            </h2>
-            <p className="mt-8 text-gray-700 text-base sm:text-lg leading-relaxed max-w-3xl mx-auto">
-              YASY nasce de uma parceria que une o melhor dos mundos:{' '}
-              <strong className="text-black">
-                a confiança de uma comunidade da Yasmin Castilho, e a expertise de
-                quem já construiu uma indústria de sucesso, Lucas Castro founder da
-                Dr. Peanut.
-              </strong>
-            </p>
-            <p className="mt-3 text-gray-500 text-sm italic">
-              Isso não é &ldquo;mais uma marca de influenciadora&rdquo;. É um novo
-              modelo de negócio.
-            </p>
+    <section
+      id="socios"
+      className="bg-primary scroll-mt-20"
+    >
+      <div className="top-curve bg-secondary">
+        <div className="relative z-10 mx-auto flex container flex-col items-center gap-10 md:gap-16 pb-16 pt-8 md:pb-20 md:pt-12 lg:pb-28 lg:pt-16 xl:pb-24 xl:pt-[96px]">
+          <h2 data-aos="fade-up" className="text-center">
+            <span className="text-primary font-bold font-sans-2 text-8xl uppercase text-center">UNIÃO DE PROPÓSITO,</span>
+            <br />
+            <span className="text-contrast font-bold font-sans-2 text-8xl uppercase text-center">EXPERTISE E GESTÃO</span>
+          </h2>
+
+          <p data-aos="fade-up" data-aos-delay="200" className="max-w-[1000px] text-center  text-contrast md:text-xl">
+            A YASY nasce de uma parceria que une o melhor dos mundos: <strong className="font-semibold">a confiança da comunidade da Yasmin Castilho e a expertise de quem já construiu uma indústria de sucesso — Lucas Castro, fundador da Dr. Peanut.</strong>
+            <br />
+            Isso não é &quot;mais uma marca de influenciadora&quot;. É um novo modelo de negócio.
+          </p>
+
+          <div data-aos="fade-up" data-aos-delay="300" className="relative flex w-full flex-col items-center justify-center gap-10 lg:flex-row lg:gap-16">
+            {founders.map((founder) => (
+              <div
+                key={founder.name}
+                className="founder-card flex w-full flex-col gap-5 rounded-[32px] bg-contrast p-12 shadow-[16px_16px_24px_rgba(0,0,0,0.16)] lg:w-1/2 transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[20px_20px_32px_rgba(0,0,0,0.24)] hover:scale-[1.02] ring-2 ring-transparent hover:ring-primary/20 [&_img]:transition-transform [&_img]:duration-500 [&_img]:ease-out hover:[&_img]:scale-105"
+              >
+                <div className="founder-image-wrap relative rounded-[19px] p-[3px] overflow-hidden">
+                  <div className="founder-border-anim" aria-hidden="true" />
+                  <div className="relative aspect-4/3 w-full overflow-hidden rounded-[16px]">
+                    <img
+                      src={founder.photo}
+                      alt={founder.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col">
+                  <h3 className="text-center font-sans-2 text-5xl font-bold uppercase text-primary lg:text-6xl leading-none">
+                    {founder.name}
+                  </h3>
+                  <p className="mb-5 text-center font-sans-2 text-3xl font-bold uppercase text-secondary lg:text-4xl leading-none">
+                    {founder.role}
+                  </p>
+                  <p className="text-center text-primary text-xl">
+                    <span dangerouslySetInnerHTML={{ __html: founder.description }} />
+                  </p>
+                </div>
+              </div>
+            ))}
+            <FloatingStar fill="rgb(var(--color-primary))" className="absolute" />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
-            {/* Yasmin */}
-            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-200">
-              <PersonPlaceholder />
-              <div className="mt-6 text-center">
-                <h3 className="text-2xl font-extrabold text-black uppercase">
-                  Yasmin Castilho
-                </h3>
-                <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mt-1">
-                  A Alma
-                </p>
-                <p className="mt-4 text-sm text-gray-700 leading-relaxed">
-                  A YASY é o coração da Yasmin em forma de marca. Ela personifica{' '}
-                  <strong className="text-black">
-                    a leveza, a alegria e a busca por um bem-estar real
-                  </strong>
-                  , sem filtros. Não é sobre vender um produto, é sobre
-                  compartilhar um estilo de vida onde ser feliz é fácil.
-                </p>
+          <div data-aos="fade-up" data-aos-delay="200" className="flex w-full max-w-[1632px] flex-col items-center gap-4">
+            <div className="flex w-full items-center gap-4 md:gap-8">
+              <button
+                onClick={scrollPrev}
+                aria-label="Citação anterior"
+                className="hidden shrink-0 cursor-pointer opacity-50 transition-opacity hover:opacity-100 md:block"
+              >
+                <img
+                  src="/arrow-left.svg"
+                  alt=""
+                  className="w-16 h-16 object-cover"
+                />
+              </button>
+
+              <div className="min-w-0 flex-1 overflow-hidden" ref={emblaRef}>
+                <div className="flex">
+                  {quotes.map((quote, i) => (
+                    <div
+                      key={i}
+                      className="flex min-w-0 flex-[0_0_100%] flex-col items-center gap-6 px-4 md:gap-10"
+                    >
+                      <p className="text-center  text-contrast text-2xl md:text-3xl">
+                        &ldquo;{quote.text}&rdquo;
+                      </p>
+                      <div className="flex items-center gap-5">
+                        <img
+                          src={quote.avatar}
+                          alt={quote.author}
+                          className="w-16 h-16 rounded-full object-cover"
+                        />
+                        <span className=" text-contrast text-2xl md:text-3xl">
+                          {quote.author}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
+
+              <button
+                onClick={scrollNext}
+                aria-label="Próxima citação"
+                className="hidden shrink-0 cursor-pointer opacity-50 transition-opacity hover:opacity-100 md:block"
+              >
+                <img
+                  src="/arrow-right.svg"
+                  alt=""
+                  className="w-16 h-16 object-cover"
+                />
+              </button>
             </div>
 
-            {/* Star divider (desktop) */}
-            <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-              <div className="bg-gray-100 p-2 rounded-full">
-                <StarIcon />
-              </div>
-            </div>
-
-            {/* Star divider (mobile) */}
-            <div className="flex lg:hidden justify-center -my-4 z-10 relative">
-              <div className="bg-gray-100 p-2 rounded-full">
-                <StarIcon />
-              </div>
-            </div>
-
-            {/* Lucas */}
-            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-200">
-              <PersonPlaceholder />
-              <div className="mt-6 text-center">
-                <h3 className="text-2xl font-extrabold text-black uppercase">
-                  Lucas Castro
-                </h3>
-                <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mt-1">
-                  O Mestre Criador
-                </p>
-                <p className="mt-4 text-sm text-gray-700 leading-relaxed">
-                  O gênio por trás do sabor. Lucas é o fundador da Dr. Peanut e a
-                  mente que garante{' '}
-                  <strong className="text-black">
-                    a qualidade e a inovação em cada detalhe
-                  </strong>
-                  . Sua obsessão por excelência é o que torna a pipoca YASY uma
-                  experiência única e inigualável.
-                </p>
-              </div>
+            <div className="flex gap-2 md:hidden">
+              {quotes.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => scrollTo(i)}
+                  aria-label={`Ir para citação ${i + 1}`}
+                  className={`h-3 w-3 rounded-full transition-all duration-300 ${i === selectedIndex
+                    ? "bg-contrast scale-125"
+                    : "bg-contrast/40"
+                    }`}
+                />
+              ))}
             </div>
           </div>
         </div>
       </div>
-
-      {/* Quotes Carousel */}
-      <QuotesCarousel />
+      <div className="bottom-curve-lg h-24 bg-secondary" />
     </section>
   );
 }

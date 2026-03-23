@@ -1,13 +1,179 @@
+/* ──────────────────────────────────────────────
+   YASY — Map Roman
+   ────────────────────────────────────────────── */
+
 @font-face {
-  font-family: 'IBMPlexSerif';
-  font-display: swap;
+  font-family: "Map Roman";
+  src: url("/fonts/MapRoman-Condensed.ttf") format("truetype");
   font-weight: 400;
-  src: url('./fonts/IBMPlexSerif-Text.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'IBMPlexSerif';
+  font-style: normal;
   font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners";
+  src: url("/fonts/Owners_Light_Italic.otf") format("opentype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners";
+  src: url("/fonts/Owners.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners";
+  src: url("/fonts/Owners_Italic.otf") format("opentype");
   font-weight: 400;
   font-style: italic;
-  src: url('./fonts/IBMPlexSerif-TextItalic.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners";
+  src: url("/fonts/Owners_Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners";
+  src: url("/fonts/Owners_Medium_Italic.otf") format("opentype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners";
+  src: url("/fonts/Owners_Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners";
+  src: url("/fonts/Owners_Bold_Italic.otf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners";
+  src: url("/fonts/Owners_Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners";
+  src: url("/fonts/Owners_Black_Italic.otf") format("opentype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ──────────────────────────────────────────────
+       YASY — Owners Narrow
+       ────────────────────────────────────────────── */
+
+@font-face {
+  font-family: "Owners Narrow";
+  src: url("/fonts/Owners_Narrow_Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners Narrow";
+  src: url("/fonts/Owners_Narrow_Light_Italic.otf") format("opentype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners Narrow";
+  src: url("/fonts/Owners_Narrow.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners Narrow";
+  src: url("/fonts/Owners_Narrow_Italic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners Narrow";
+  src: url("/fonts/Owners_Narrow_Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners Narrow";
+  src: url("/fonts/Owners_Narrow_Medium_Italic.otf") format("opentype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners Narrow";
+  src: url("/fonts/Owners_Narrow_Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners Narrow";
+  src: url("/fonts/Owners_Narrow_Bold_Italic.otf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners Narrow";
+  src: url("/fonts/Owners_Narrow_Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Owners Narrow";
+  src: url("/fonts/Owners_Narrow_Black_Italic.otf") format("opentype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ──────────────────────────────────────────────
+       YASY — Owners XNarrow
+       ────────────────────────────────────────────── */
+
+@font-face {
+  font-family: "Owners XNarrow";
+  src: url("/fonts/Owners_XNarrow_Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }

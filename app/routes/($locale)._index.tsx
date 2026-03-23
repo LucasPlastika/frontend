@@ -10,8 +10,10 @@ import {MeetTheProduct} from '~/components/MeetTheProduct';
 import {ProductShowcase} from '~/components/ProductShowcase';
 import {StoryTeaser} from '~/components/StoryTeaser';
 import {BenefitsGrid} from '~/components/BenefitsGrid';
+import {RecipesSection} from '~/components/RecipesSection';
+import {TestimonialsSection} from '~/components/TestimonialsSection';
 import {FoundersSection} from '~/components/FoundersSection';
-import {NewsletterSection} from '~/components/NewsletterSection';
+import {RegisterSection} from '~/components/RegisterSection';
 
 export const headers = routeHeaders;
 
@@ -27,15 +29,18 @@ export async function loader(args: LoaderFunctionArgs) {
     throw new Response(null, {status: 404});
   }
 
-  const {products} = await storefront.query(HOMEPAGE_PRODUCTS_QUERY, {
-    variables: {
-      country,
-      language,
-    },
-  });
+  const [{products}, {articles}] = await Promise.all([
+    storefront.query(HOMEPAGE_PRODUCTS_QUERY, {
+      variables: {country, language},
+    }),
+    storefront.query(BLOG_ARTICLES_QUERY, {
+      variables: {country, language},
+    }),
+  ]);
 
   return json({
     products: products.nodes,
+    articles: articles.nodes,
     seo: seoPayload.home({url: args.request.url}),
   });
 }
@@ -45,7 +50,7 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 };
 
 export default function Homepage() {
-  const {products} = useLoaderData<typeof loader>();
+  const {products, articles} = useLoaderData<typeof loader>();
 
   return (
     <>
@@ -55,7 +60,9 @@ export default function Homepage() {
       <StoryTeaser />
       <BenefitsGrid />
       <FoundersSection />
-      <NewsletterSection />
+      <RecipesSection articles={articles} />
+      <TestimonialsSection />
+      <RegisterSection />
     </>
   );
 }
@@ -72,4 +79,30 @@ const HOMEPAGE_PRODUCTS_QUERY = `#graphql
     }
   }
   ${PRODUCT_CARD_FRAGMENT}
+` as const;
+
+const BLOG_ARTICLES_QUERY = `#graphql
+  query BlogArticles(
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
+    articles(first: 6, sortKey: PUBLISHED_AT, reverse: true) {
+      nodes {
+        id
+        title
+        handle
+        publishedAt
+        excerpt
+        blog {
+          handle
+        }
+        image {
+          url
+          altText
+          width
+          height
+        }
+      }
+    }
+  }
 ` as const;
