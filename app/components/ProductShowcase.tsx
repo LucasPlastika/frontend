@@ -13,18 +13,18 @@ export function ProductShowcase({
 
   return (
     <section className="bg-primary">
-      <div className="top-curve-lg py-16 lg:py-24 bg-secondary">
-        <div className="mx-auto container">
+      <div className="top-curve lg:top-curve-lg pt-16 lg:py-24 bg-secondary">
+          <div className="mx-auto container px-4 lg:px-0">
           <h2 className="text-center text-contrast">
             <span className="text-primary text-6xl lg:text-8xl font-sans-2 uppercase">
               {isSingle ? 'Nosso' : 'Escolha'}{" "}
             </span>
-            <span className="font-sans text-6xl lg:text-8xl font-sans-2 uppercase">
+            <span className="text-6xl lg:text-8xl font-sans-2 uppercase">
               {isSingle ? 'LANÇAMENTO' : 'SEU SABOR'}
             </span>
           </h2>
 
-          <p className="mt-4 text-center text-contrast text-sm md:text-lg">
+          <p className="mt-4 text-center text-contrast md:text-lg">
             {isSingle
               ? 'Conheça a pipoca que vai mudar a sua relação com snacks saudáveis.'
               : 'Dois sabores incríveis. Dois formatos. 4 maneiras de aproveitar.'}

@@ -40,7 +40,7 @@ export default {
         mobileGallery: 'calc(100vw - 3rem)',
       },
       fontFamily: {
-        sans: ['Owners'],
+        sans: ['"Open Sans"', 'sans-serif'],
         "sans-2": ['Owners XNarrow'],
         "sans-3": ['Owners Narrow'],
         serif: ['Map Roman'],

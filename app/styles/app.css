@@ -154,7 +154,7 @@ shop-pay-button {
   }
 
   .swimlane {
-    @apply grid w-full snap-x snap-mandatory scroll-px-6 grid-flow-col justify-start gap-4 overflow-x-scroll px-6 pb-4;
+    @apply grid w-full snap-x snap-mandatory scroll-px-6 grid-flow-col justify-start gap-4 overflow-x-scroll pb-4;
   }
 }
 
@@ -231,7 +231,7 @@ shop-pay-button {
 
 @media screen and (max-width: 1024px) {
   .bottom-curve {
-    clip-path: ellipse(160% 100% at top);
+    clip-path: ellipse(270% 100% at top);
   }
 
   .bottom-curve-lg {
@@ -302,6 +302,58 @@ shop-pay-button {
 
 button {
   cursor: pointer;
+}
+
+/* ── Nutrition table (dangerouslySetInnerHTML) ── */
+.nutrition-table table {
+  width: 100%;
+  font-size: 0.8125rem;
+}
+
+.nutrition-table table thead tr {
+  background-color: rgb(var(--color-primary));
+}
+
+.nutrition-table table thead th {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgb(var(--color-contrast));
+}
+
+.nutrition-table table thead th:first-child {
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.nutrition-table table thead th:last-child {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.nutrition-table table tbody tr {
+  border-bottom: 1px solid rgb(var(--color-contrast) / 0.12);
+  transition: background-color 150ms;
+}
+
+.nutrition-table table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.nutrition-table table tbody tr:hover {
+  background-color: rgb(var(--color-contrast) / 0.06);
+}
+
+.nutrition-table table td {
+  padding: 0.45rem 0.75rem;
+  color: rgb(var(--color-contrast));
+}
+
+.nutrition-table table td:last-child {
+  text-align: right;
+  font-weight: 600;
+  color: rgb(var(--color-contrast));
 }
 
 /* ── Hero Composition ── */

@@ -22,7 +22,7 @@ export function RegisterSection() {
 
   return (
     <section className="relative bg-primary">
-      <div className="mx-auto px-6 text-center py-16 lg:py-24">
+      <div className="mx-auto px-4 md:px-6 text-center py-16 lg:py-24">
         <h2 className="text-4xl lg:text-6xl font-medium uppercase">
           <span className="font-serif text-secondary">
             Um jeito fácil de{' '}

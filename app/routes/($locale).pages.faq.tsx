@@ -174,7 +174,7 @@ export default function FAQPage() {
     <>
       <div className="bg-primary">
         <div className="bottom-curve bg-secondary">
-          <div className="container py-12 lg:py-20 mb-24 mx-auto">
+          <div className="container mx-auto px-4 lg:px-0 py-12 lg:py-20 mb-24">
             <nav className="mb-6 flex items-center gap-2 text-sm font-bold uppercase text-contrast">
               <Link to="/" className="font-serif text-primary hover:text-contrast transition-colors">
                 Home
@@ -189,7 +189,7 @@ export default function FAQPage() {
               Dúvidas <span className="font-sans-2 text-primary">Frequentes</span>
             </h1>
 
-            <p className="mt-3 text-contrast mb-12 text-2xl">
+            <p className="mt-3 text-contrast mb-12 text-lg lg:text-2xl">
               Tudo que você precisa saber sobre a YASY.
             </p>
 

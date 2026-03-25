@@ -62,11 +62,11 @@ export function FoundersSection() {
       className="bg-primary scroll-mt-20"
     >
       <div className="top-curve bg-secondary">
-        <div className="relative z-10 mx-auto flex container flex-col items-center gap-10 md:gap-16 pb-16 pt-8 md:pb-20 md:pt-12 lg:pb-28 lg:pt-16 xl:pb-24 xl:pt-[96px]">
+        <div className="relative z-10 mx-auto flex container px-4 lg:px-0 flex-col items-center gap-10 md:gap-16 py-16 md:pb-20 md:pt-12 lg:pb-28 lg:pt-16 xl:pb-24 xl:pt-[96px]">
           <h2 data-aos="fade-up" className="text-center">
-            <span className="text-primary font-bold font-sans-2 text-8xl uppercase text-center">UNIÃO DE PROPÓSITO,</span>
+            <span className="text-primary font-bold font-sans-2 text-6xl lg:text-8xl uppercase text-center">UNIÃO DE PROPÓSITO,</span>
             <br />
-            <span className="text-contrast font-bold font-sans-2 text-8xl uppercase text-center">EXPERTISE E GESTÃO</span>
+            <span className="text-contrast font-bold font-sans-2 text-6xl lg:text-8xl uppercase text-center">EXPERTISE E GESTÃO</span>
           </h2>
 
           <p data-aos="fade-up" data-aos-delay="200" className="max-w-[1000px] text-center  text-contrast md:text-xl">
@@ -79,7 +79,7 @@ export function FoundersSection() {
             {founders.map((founder) => (
               <div
                 key={founder.name}
-                className="founder-card flex w-full flex-col gap-5 rounded-[32px] bg-contrast p-12 shadow-[16px_16px_24px_rgba(0,0,0,0.16)] lg:w-1/2 transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[20px_20px_32px_rgba(0,0,0,0.24)] hover:scale-[1.02] ring-2 ring-transparent hover:ring-primary/20 [&_img]:transition-transform [&_img]:duration-500 [&_img]:ease-out hover:[&_img]:scale-105"
+                className="founder-card flex w-full flex-col gap-5 rounded-[32px] bg-contrast p-6 lg:p-12 shadow-[16px_16px_24px_rgba(0,0,0,0.16)] lg:w-1/2 transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[20px_20px_32px_rgba(0,0,0,0.24)] hover:scale-[1.02] ring-2 ring-transparent hover:ring-primary/20 [&_img]:transition-transform [&_img]:duration-500 [&_img]:ease-out hover:[&_img]:scale-105"
               >
                 <div className="founder-image-wrap relative rounded-[19px] p-[3px] overflow-hidden">
                   <div className="founder-border-anim" aria-hidden="true" />
@@ -98,7 +98,7 @@ export function FoundersSection() {
                   <p className="mb-5 text-center font-sans-2 text-3xl font-bold uppercase text-secondary lg:text-4xl leading-none">
                     {founder.role}
                   </p>
-                  <p className="text-center text-primary text-xl">
+                  <p className="text-center text-primary text-base lg:text-xl">
                     <span dangerouslySetInnerHTML={{ __html: founder.description }} />
                   </p>
                 </div>
@@ -128,16 +128,16 @@ export function FoundersSection() {
                       key={i}
                       className="flex min-w-0 flex-[0_0_100%] flex-col items-center gap-6 px-4 md:gap-10"
                     >
-                      <p className="text-center  text-contrast text-2xl md:text-3xl">
+                      <p className="text-center  text-contrast text-lg lg:text-2xl md:text-3xl">
                         &ldquo;{quote.text}&rdquo;
                       </p>
-                      <div className="flex items-center gap-5">
+                      <div className="flex items-center gap-2 lg:gap-5">
                         <img
                           src={quote.avatar}
                           alt={quote.author}
-                          className="w-16 h-16 rounded-full object-cover"
+                          className="w-12 h-12 lg:w-16 lg:h-16 rounded-full object-cover"
                         />
-                        <span className=" text-contrast text-2xl md:text-3xl">
+                        <span className=" text-contrast text-lg lg:text-2xl">
                           {quote.author}
                         </span>
                       </div>

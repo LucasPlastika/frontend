@@ -30,7 +30,7 @@ export function RecipesSection({articles}: {articles?: BlogArticle[]}) {
 
   return (
     <section className="bg-primary py-16 lg:py-24">
-      <div className="mx-auto container">
+      <div className="mx-auto container px-4 lg:px-0">
         <h2 className="text-center text-4xl lg:text-7xl uppercase tracking-wide">
           <span className="font-serif font-medium text-secondary">Receitas & </span>
           <span className="font-serif font-medium text-contrast">Inspiração</span>

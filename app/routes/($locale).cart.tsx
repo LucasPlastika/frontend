@@ -87,20 +87,24 @@ export default function CartRoute() {
   const cart = useLoaderData<typeof loader>();
 
   return (
-    <div>
-      <div className="max-w-7xl min-h-screen mx-auto px-6 md:px-8 lg:px-12 py-12">
-        <nav className="mb-6 text-sm text-gray-500">
-          <Link to="/" className="text-primary opacity-70 hover:opacity-100 transition-colors">
-            Home
-          </Link>
-          <span className="mx-2">/</span>
-          <span className="text-primary font-medium">Sacola</span>
-        </nav>
+    <div className="bg-[#0B1215]">
+      <div className="bg-secondary min-h-screen">
+        <div className="mx-auto container px-4 lg:px-0 py-10 md:py-16">
+          <nav className="mb-6 flex items-center gap-2 text-sm font-bold uppercase text-contrast">
+            <Link to="/" className="text-primary hover:text-contrast transition-colors">
+              Home
+            </Link>
+            <span className="text-primary">→</span>
+            <span className="text-contrast">Sacola</span>
+          </nav>
 
-        <h1 className="text-3xl font-bold text-primary mb-8">Sacola</h1>
+          <h1 className="font-sans-2 text-5xl md:text-7xl font-bold uppercase text-primary mb-8">
+            Sacola
+          </h1>
 
-        <Cart layout="page" cart={cart} />
-        <Analytics.CartView />
+          <Cart layout="page" cart={cart} />
+          <Analytics.CartView />
+        </div>
       </div>
       <div className="top-curve-lg h-24 bg-[#0B1215]" />
     </div>

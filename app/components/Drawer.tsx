@@ -17,12 +17,18 @@ export function Drawer({
   open,
   onClose,
   openFrom = 'right',
+  className = 'bg-contrast',
+  panelClassName = 'w-screen max-w-lg',
+  headingClassName,
   children,
 }: {
   heading?: string;
   open: boolean;
   onClose: () => void;
   openFrom: 'right' | 'left';
+  className?: string;
+  panelClassName?: string;
+  headingClassName?: string;
   children: React.ReactNode;
 }) {
   const offScreen = {
@@ -61,7 +67,7 @@ export function Drawer({
                 leaveFrom="translate-x-0"
                 leaveTo={offScreen[openFrom]}
               >
-                <Dialog.Panel className="w-screen max-w-lg text-left align-middle transition-all transform shadow-xl h-screen-dynamic bg-contrast">
+                <Dialog.Panel className={`${panelClassName} text-left align-middle transition-all transform shadow-xl h-screen-dynamic ${className}`}>
                   <header
                     className={`sticky top-0 flex items-center px-6 h-nav sm:px-8 md:px-12 ${
                       heading ? 'justify-between' : 'justify-end'
@@ -69,14 +75,14 @@ export function Drawer({
                   >
                     {heading !== null && (
                       <Dialog.Title>
-                        <Heading as="span" size="lead" id="cart-contents">
+                        <Heading as="span" size="lead" id="cart-contents" className={headingClassName}>
                           {heading}
                         </Heading>
                       </Dialog.Title>
                     )}
                     <button
                       type="button"
-                      className="p-4 -m-4 transition text-primary hover:text-primary/50"
+                      className="p-4 -m-4 transition text-current opacity-70 hover:opacity-100"
                       onClick={onClose}
                       data-test="close-cart"
                     >

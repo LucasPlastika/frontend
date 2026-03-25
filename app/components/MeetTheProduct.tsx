@@ -41,7 +41,7 @@ export function MeetTheProduct({
 
   return (
     <section className="bg-primary">
-      <div className="mx-auto container py-16 lg:py-24">
+      <div className="mx-auto container px-4 lg:px-0 py-16 lg:py-24">
         <h2 className="text-center text-3xl md:text-5xl text-contrast">
           <span className="font-serif text-secondary">{titleItalic}</span>{' '}
           <span className="font-serif uppercase">{titleRest.join(' ')}</span>

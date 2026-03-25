@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 interface Benefit {
   title: string;
   label: string;
@@ -55,16 +57,22 @@ const BENEFITS: Benefit[] = [
 export function BenefitsGrid() {
   return (
     <section className="bg-primary pb-16">
-      <div className="mx-auto container">
+      <div className="mx-auto container px-4 lg:px-0">
         <h2 className="text-center text-4xl lg:text-6xl uppercase mb-12">
           <span className="text-contrast font-serif">YASY é a melhor opção </span>
           <span className="text-secondary font-serif">para a sua rotina!</span>
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {BENEFITS.map((benefit) => (
+          {BENEFITS.map((benefit, index) => {
+            const isLoneOnMobile =
+              index === BENEFITS.length - 1 && BENEFITS.length % 2 !== 0;
+            return (
             <div
               key={benefit.title}
-              className="bg-contrast/[12%] rounded-2xl p-6 text-center flex flex-col items-center gap-3"
+              className={clsx(
+                'bg-contrast/[12%] rounded-2xl p-6 text-center flex flex-col items-center gap-3',
+                isLoneOnMobile && 'col-span-2 sm:col-span-1'
+              )}
             >
               <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center text-contrast shadow-lg">
                 {benefit.icon}
@@ -78,7 +86,8 @@ export function BenefitsGrid() {
                 </span>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

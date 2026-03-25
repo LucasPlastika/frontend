@@ -70,7 +70,7 @@ export default function ArticlePage() {
           )}
           <div className="absolute [clip-path:ellipse(120%_100%_at_top)] inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
           <div className="absolute inset-0 flex flex-col justify-start">
-            <div className="container mx-auto py-6">
+            <div className="container mx-auto px-4 lg:px-0 py-6">
               <nav className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-contrast/70">
                 <Link to="/" className="font-sans-2 text-2xl hover:text-contrast transition-colors">
                   Home
@@ -90,7 +90,7 @@ export default function ArticlePage() {
             </div>
           </div>
           <div className="absolute inset-0 z-10 flex flex-col justify-end">
-            <div className="container mx-auto pb-16 lg:pb-20">
+            <div className="container mx-auto px-4 lg:px-0 pb-16 lg:pb-20">
               {tags.length > 0 && (
                 <div className="mb-4 flex flex-wrap gap-2">
                   {tags.map((tag) => (
@@ -124,7 +124,7 @@ export default function ArticlePage() {
       </div>
 
       {/* Content */}
-      <div className="container mx-auto py-20 lg:py-28">
+      <div className="container mx-auto px-4 lg:px-0 py-20 lg:py-28">
         <article
           className="prose prose-lg max-w-none !text-contrast
           prose-headings:font-sans-2

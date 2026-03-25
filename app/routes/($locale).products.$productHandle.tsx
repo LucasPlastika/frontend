@@ -1,6 +1,7 @@
-import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
-import { useLoaderData } from '@remix-run/react';
+import { json, type LoaderFunctionArgs, type ActionFunctionArgs } from '@shopify/remix-oxygen';
+import { useLoaderData, useFetcher } from '@remix-run/react';
 import { useState, useMemo } from 'react';
+import type { CepShippingResult } from '~/lib/cep-shipping';
 import {
   CartForm,
   Image,
@@ -57,6 +58,84 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   );
 
   return json({ product, related });
+}
+
+export async function action({ request, context: { env } }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const rawCep = String(formData.get('cep') ?? '').replace(/\D/g, '');
+  const price = parseFloat(String(formData.get('price') ?? '0'));
+  const weight = parseFloat(String(formData.get('weight') ?? '0.3'));
+
+  if (rawCep.length !== 8) {
+    return json<CepShippingResult>({ ok: false, error: 'CEP inválido. Digite os 8 dígitos.' });
+  }
+
+  let city = '';
+  let state = '';
+  try {
+    const viaCepRes = await fetch(`https://viacep.com.br/ws/${rawCep}/json/`);
+    const viaCepData = (await viaCepRes.json()) as Record<string, unknown>;
+    if (viaCepData?.erro) {
+      return json<CepShippingResult>({ ok: false, error: 'CEP não encontrado.' });
+    }
+    city = (viaCepData.localidade as string) ?? '';
+    state = (viaCepData.uf as string) ?? '';
+  } catch {
+    return json<CepShippingResult>({ ok: false, error: 'Não foi possível validar o CEP. Tente novamente.' });
+  }
+
+  const fromCep = env.MELHOR_ENVIO_FROM_CEP?.replace(/\D/g, '');
+  if (!fromCep || !env.MELHOR_ENVIO_TOKEN || !env.MELHOR_ENVIO_URL) {
+    return json<CepShippingResult>({ ok: false, error: 'Serviço de frete temporariamente indisponível.' });
+  }
+
+  let rates: any[] = [];
+  try {
+    const meRes = await fetch(`${env.MELHOR_ENVIO_URL}/api/v2/me/shipment/calculate`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.MELHOR_ENVIO_TOKEN}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'User-Agent': 'yasy-ecom/1.0 (contato@yasy.com.br)',
+      },
+      body: JSON.stringify({
+        from: { postal_code: fromCep },
+        to: { postal_code: rawCep },
+        package: { height: 10, width: 15, length: 20, weight },
+        options: { receipt: false, own_hand: false },
+      }),
+    });
+    rates = (await meRes.json()) as any[];
+  } catch {
+    return json<CepShippingResult>({ ok: false, error: 'Erro ao calcular o frete. Tente novamente.' });
+  }
+
+  if (!Array.isArray(rates)) {
+    return json<CepShippingResult>({ ok: false, error: 'Resposta inesperada da transportadora.' });
+  }
+
+  const FREE_SHIPPING_THRESHOLD = 99;
+  const isFreeShipping = price >= FREE_SHIPPING_THRESHOLD;
+
+  const options = rates
+    .filter((r: any) => !r.error)
+    .map((r: any) => ({
+      carrier: r.company?.name ?? r.name,
+      service: r.name,
+      price: isFreeShipping ? 0 : parseFloat(r.price ?? '0'),
+      days: r.delivery_range
+        ? `${r.delivery_range.min}–${r.delivery_range.max} dias úteis`
+        : `${r.delivery_time} dias úteis`,
+      logo: r.company?.picture ?? null,
+    }))
+    .sort((a: any, b: any) => a.price - b.price);
+
+  if (options.length === 0) {
+    return json<CepShippingResult>({ ok: false, error: 'Nenhuma opção de frete disponível para este CEP.' });
+  }
+
+  return json<CepShippingResult>({ ok: true, city, state, options });
 }
 
 const METAFIELD_KEYS = [
@@ -201,8 +280,7 @@ export default function ProductPage() {
   const ingredientes = getMeta(metafields, 'ingredientes');
   const alergenos = getMeta(metafields, 'alergenos');
   const validade = getMeta(metafields, 'validade');
-  const tabelaNutricionalRef = getMetaReference(metafields, 'tabela_nutricional');
-  const tabelaNutricionalImage = tabelaNutricionalRef?.image ?? null;
+  const tabelaNutricional = getMeta(metafields, 'tabela_nutricional');
 
   const parsedDietary = useMemo(
     () => getMetaReferenceNames(metafields, 'dietary-preferences'),
@@ -216,11 +294,9 @@ export default function ProductPage() {
 
   const infoItems = useMemo(() => {
     const items: { title: string; content: string | React.ReactNode; defaultOpen?: boolean }[] = [];
-    if (tabelaNutricionalImage) items.push({
+    if (tabelaNutricional) items.push({
       title: 'Tabela nutricional', content: (
-        <div className="flex justify-center">
-          <Image data={tabelaNutricionalImage} width={700} className="max-w-full" />
-        </div>
+        <div className="nutrition-table" dangerouslySetInnerHTML={{ __html: tabelaNutricional }} />
       )
     });
     if (ingredientes)
@@ -228,14 +304,18 @@ export default function ProductPage() {
     if (alergenos) items.push({ title: 'Alérgenos', content: alergenos });
     if (validade) items.push({ title: 'Validade', content: validade });
     return items;
-  }, [tabelaNutricionalImage, ingredientes, alergenos, validade]);
+  }, [tabelaNutricional, ingredientes, alergenos, validade]);
 
   /* ── CEP ── */
   const [cep, setCep] = useState('');
+  const cepFetcher = useFetcher<CepShippingResult>();
+  const cepLoading = cepFetcher.state !== 'idle';
+  const cepResult = cepFetcher.data ?? null;
+
 
   return (
     <div className="bg-secondary min-h-screen">
-      <div className="container mx-auto py-8 lg:py-12">
+      <div className="container mx-auto px-4 lg:px-0 py-8 lg:py-12">
         {/* Breadcrumb */}
         <nav className="mb-6 flex items-center gap-2 text-sm font-bold uppercase text-contrast">
           <Link to="/" className="font-serif text-primary hover:text-contrast transition-colors">
@@ -389,38 +469,103 @@ export default function ProductPage() {
             {/* CEP calculator */}
             <div>
               <p className="text-lg text-contrast">
-                <span className="font-bold">Frete grátis:</span>{' '}
-                <span className="text-contrast">pedidos acima de R$ 99</span>
+                <span className="font-bold">Calcular frete</span>
               </p>
-              <form
-                className="mt-2 flex gap-2 w-fit"
-                onSubmit={(e) => e.preventDefault()}
+              <cepFetcher.Form
+                method="post"
+                className="mt-2 flex gap-2"
               >
+                <input type="hidden" name="price" value={price?.amount ?? 0} />
                 <input
                   type="text"
+                  name="cep"
                   placeholder="00000-000"
                   maxLength={9}
                   value={cep}
                   onChange={(e) => {
                     const raw = e.target.value.replace(/\D/g, '').slice(0, 8);
-                    const masked = raw.length > 5 ? `${raw.slice(0, 5)}-${raw.slice(5)}` : raw;
+                    const masked =
+                      raw.length > 5
+                        ? `${raw.slice(0, 5)}-${raw.slice(5)}`
+                        : raw;
                     setCep(masked);
                   }}
-                  className="flex-1 rounded-lg border border-contrast/30 bg-contrast px-4 py-2.5 text-sm outline-none focus:border-contrast transition-colors"
+                  disabled={cepLoading}
+                  className="w-36 rounded-lg border border-contrast/30 bg-contrast px-4 py-2.5 text-sm outline-none focus:border-contrast transition-colors disabled:opacity-50"
                 />
                 <button
                   type="submit"
-                  className="rounded-lg bg-primary px-6 py-1 font-sans-2 text-2xl font-bold uppercase text-contrast transition-opacity hover:opacity-90"
+                  disabled={cepLoading || cep.replace(/\D/g, '').length !== 8}
+                  className="rounded-lg bg-primary px-6 py-1 font-sans-2 text-2xl font-bold uppercase text-contrast transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Calcular
+                  {cepLoading ? (
+                    <svg
+                      className="w-5 h-5 animate-spin mx-auto"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                      />
+                    </svg>
+                  ) : (
+                    'Calcular'
+                  )}
                 </button>
-              </form>
+              </cepFetcher.Form>
+
+              {/* Error */}
+              {cepResult && !cepResult.ok && (
+                <p className="mt-2 text-sm text-contrast">{cepResult.error}</p>
+              )}
+
+              {/* Results */}
+              {cepResult && cepResult.ok && (
+                <div className="mt-3 space-y-2">
+                  <p className="text-xs text-contrast/60 uppercase tracking-wider">
+                    {cepResult.city} — {cepResult.state}
+                  </p>
+                  {cepResult.options.map((opt) => (
+                    <div
+                      key={`${opt.carrier}-${opt.service}`}
+                      className="flex items-center justify-between rounded-lg bg-contrast/10 px-4 py-2.5"
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <div className="min-w-0">
+                          <p className="text-sm font-bold text-contrast leading-tight truncate">
+                            {opt.carrier} | {opt.service}
+                          </p>
+                          <p className="text-xs text-contrast/60">{opt.days}</p>
+                        </div>
+                      </div>
+                      <span className="ml-4 shrink-0 font-bold text-contrast">
+                        {opt.price === 0 ? (
+                          <span className="text-green-400">GRÁTIS</span>
+                        ) : (
+                          `R$ ${opt.price.toFixed(2).replace('.', ',')}`
+                        )}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Product info accordion */}
             {infoItems.length > 0 && (
               <div className="pt-2">
-                <h2 className="mb-2 font-serif text-3xl uppercase text-contrast">
+                <h2 className="mb-2 font-serif text-xl lg:text-3xl uppercase text-contrast">
                   Informações do Produto
                 </h2>
                 <Accordion items={infoItems} />
@@ -432,8 +577,8 @@ export default function ProductPage() {
 
       {/* Related products */}
       {related.length > 0 && (
-        <div className="top-curve-lg bg-primary py-16 lg:py-24">
-          <div className="container mx-auto">
+        <div className="top-curve lg:top-curve-lg bg-primary py-16 lg:py-24">
+          <div className="container mx-auto px-4 lg:px-0">
             <h2 className="mb-10 text-center text-4xl lg:text-6xl text-contrast">
               <span className="font-serif text-secondary">Você também </span>
               <span className="font-serif uppercase">vai gostar</span>

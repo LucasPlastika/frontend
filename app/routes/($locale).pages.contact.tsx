@@ -35,7 +35,7 @@ export default function ContactPage() {
 
   return (
     <div className="bg-secondary">
-      <div className="container mx-auto py-12 lg:py-20">
+      <div className="container mx-auto px-4 lg:px-0 py-12 lg:py-20">
         <nav className="mb-6 flex items-center gap-2 text-sm font-bold uppercase text-contrast">
           <Link to="/" className="font-serif text-primary hover:text-contrast transition-colors">
             Home
@@ -51,9 +51,9 @@ export default function ContactPage() {
           Adoramos ouvir você. Envie sua mensagem e responderemos em até 2 dias úteis.
         </p>
 
-        <div className="grid gap-8 w-full lg:grid-cols-3 items-start">
+        <div className="grid lg:gap-x-8 gap-y-8 w-full grid-cols-1 lg:grid-cols-3 items-start">
           {/* Form card */}
-          <div className="rounded-3xl bg-contrast p-8 col-span-2 sm:p-10">
+          <div className="rounded-3xl bg-contrast p-6 md:p-8 col-span-2">
             {submitted ? (
               <div className="text-center py-12">
                 <p className="text-lg font-bold text-primary">
@@ -161,7 +161,7 @@ export default function ContactPage() {
           </div>
 
           {/* Info card */}
-          <div className="rounded-3xl bg-primary p-8 sm:p-10 text-contrast space-y-6">
+          <div className="rounded-3xl bg-primary p-6 md:p-8 w-full text-contrast space-y-6">
             <div>
               <h3 className="font-bold">E-mail</h3>
               <a

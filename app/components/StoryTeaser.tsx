@@ -1,7 +1,7 @@
 export function StoryTeaser() {
   return (
     <section className="bg-primary py-16">
-      <div className="container mx-auto text-center">
+      <div className="container mx-auto px-4 lg:px-0 text-center">
         <h2 className="text-4xl lg:text-6xl font-serif uppercase">
           <span className="text-secondary font-serif">Sabor ou Saúde?</span>
           <br />

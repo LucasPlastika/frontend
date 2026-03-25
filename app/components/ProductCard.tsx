@@ -83,7 +83,7 @@ export function ProductCard({
           {product.title}
         </h3>
 
-        <span className="inline-flex font-sans-2 text-xl w-fit px-24 items-center justify-center gap-2 rounded-full bg-primary py-2.5 font-bold uppercase tracking-wider text-contrast transition-opacity group-hover:opacity-90">
+        <span className="inline-flex font-sans-2 text-xl w-fit px-12 lg:px-24 items-center justify-center gap-2 rounded-full bg-primary py-2.5 font-bold uppercase tracking-wider text-contrast transition-opacity group-hover:opacity-90">
           Comprar
         </span>
       </div>

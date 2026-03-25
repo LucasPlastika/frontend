@@ -29,6 +29,9 @@ declare global {
     PUBLIC_CUSTOMER_ACCOUNT_API_URL: string;
     PUBLIC_CHECKOUT_DOMAIN: string;
     SHOP_ID: string;
+    MELHOR_ENVIO_URL: string;
+    MELHOR_ENVIO_TOKEN: string;
+    MELHOR_ENVIO_FROM_CEP: string;
   }
 }
 

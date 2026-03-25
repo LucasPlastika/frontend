@@ -57,7 +57,7 @@ export default function ShopAll() {
 
   return (
     <div className="bg-secondary min-h-screen">
-      <div className="container mx-auto py-10 lg:py-14">
+      <div className="container mx-auto px-4 lg:px-0 py-10 lg:py-14">
         <nav className="mb-6 flex items-center gap-2 text-sm font-bold uppercase text-contrast">
           <Link to="/" className="font-serif text-primary hover:text-contrast transition-colors">
             Home
@@ -71,7 +71,7 @@ export default function ShopAll() {
             <span className="font-sans-2 text-primary">Todos </span>
             <span className="font-sans-2 text-contrast">os Produtos</span>
           </h1>
-          <p className="text-contrast text-2xl">
+          <p className="text-contrast text-lg lg:text-2xl">
             Pipoca gourmet zero açúcar em dois sabores incríveis e dois
             formatos. Escolha o seu favorito.
           </p>

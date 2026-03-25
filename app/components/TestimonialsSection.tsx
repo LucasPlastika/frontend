@@ -1,3 +1,6 @@
+import {useCallback, useEffect, useState} from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
+
 const TESTIMONIALS = [
   {
     quote:
@@ -34,10 +37,10 @@ const TESTIMONIALS = [
 function Stars() {
   return (
     <div className="flex gap-0.5 text-secondary" aria-label="5 estrelas">
-      {Array.from({ length: 5 }).map((_, i) => (
+      {Array.from({length: 5}).map((_, i) => (
         <svg
           key={i}
-          className="h-6 w-6 fill-current"
+          className="h-5 w-5 fill-current"
           viewBox="0 0 20 20"
           aria-hidden="true"
         >
@@ -48,12 +51,60 @@ function Stars() {
   );
 }
 
+function ArrowButton({
+  direction,
+  onClick,
+}: {
+  direction: 'prev' | 'next';
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label={direction === 'prev' ? 'Depoimento anterior' : 'Próximo depoimento'}
+      className="hidden shrink-0 cursor-pointer opacity-50 transition-opacity hover:opacity-100 md:block"
+    >
+      <img
+        src={direction === 'prev' ? '/arrow-left.svg' : '/arrow-right.svg'}
+        alt=""
+        className="h-12 w-12 object-contain"
+      />
+    </button>
+  );
+}
+
 export function TestimonialsSection() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: 'start',
+    dragFree: false,
+  });
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+  const scrollTo = useCallback(
+    (index: number) => emblaApi?.scrollTo(index),
+    [emblaApi],
+  );
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    emblaApi.on('select', onSelect);
+    onSelect();
+    return () => {
+      emblaApi.off('select', onSelect);
+    };
+  }, [emblaApi]);
+
   return (
     <section className="bg-primary overflow-hidden">
       <div className="top-curve-lg py-16 lg:py-24 bg-secondary">
-        <div className="mx-auto container">
-          <h2 className="text-center text-6xl lg:text-8xl uppercase">
+        <div className="mx-auto container px-4 lg:px-0">
+
+          <h2 className="text-center text-5xl lg:text-8xl uppercase">
             <span className="font-sans-2 text-primary">Clientes </span>
             <span className="font-sans-2 text-contrast">Felizes</span>
           </h2>
@@ -62,23 +113,48 @@ export function TestimonialsSection() {
             Veja o que nossa comunidade está dizendo
           </p>
 
-          <div className="mt-12 flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide lg:grid lg:grid-cols-5 lg:overflow-visible lg:pb-0">
-            {TESTIMONIALS.map((t) => (
-              <div
-                key={t.name}
-                className="flex min-w-[240px] shrink-0 snap-center flex-col gap-4 rounded-2xl bg-contrast p-6 lg:min-w-0"
-              >
-                <Stars />
-                <p className="flex-1 text-sm italic leading-relaxed text-primary/90">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-                <div>
-                  <p className="text-sm font-bold text-primary">{t.name}</p>
-                  <p className="text-xs text-primary/60">{t.city}</p>
-                </div>
+          <div className="mt-12 flex w-full items-center gap-4 md:gap-8">
+            <ArrowButton direction="prev" onClick={scrollPrev} />
+
+            <div className="min-w-0 flex-1 overflow-hidden" ref={emblaRef}>
+              <div className="flex gap-4">
+                {TESTIMONIALS.map((t) => (
+                  <div
+                    key={t.name}
+                    className="flex min-w-0 flex-[0_0_100%] md:flex-[0_0_calc(50%-0.5rem)] lg:flex-[0_0_calc(33.333%-0.667rem)] flex-col gap-4 rounded-2xl bg-contrast p-6"
+                  >
+                    <Stars />
+                    <p className="flex-1 text-sm italic leading-relaxed text-primary/90">
+                      &ldquo;{t.quote}&rdquo;
+                    </p>
+                    <div>
+                      <p className="text-sm font-bold text-primary">{t.name}</p>
+                      <p className="text-xs text-primary/60">{t.city}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
+            </div>
+
+            <ArrowButton direction="next" onClick={scrollNext} />
+          </div>
+
+          {/* Dots */}
+          <div className="mt-6 flex justify-center gap-2">
+            {TESTIMONIALS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => scrollTo(i)}
+                aria-label={`Ir para depoimento ${i + 1}`}
+                className={`h-2.5 w-2.5 rounded-full transition-all duration-300 ${
+                  i === selectedIndex
+                    ? 'bg-contrast scale-125'
+                    : 'bg-contrast/40'
+                }`}
+              />
             ))}
           </div>
+
         </div>
       </div>
       <div className="bottom-curve-lg h-24 bg-secondary" />

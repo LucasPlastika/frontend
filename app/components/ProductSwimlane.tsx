@@ -18,8 +18,8 @@ export function ProductSwimlane({
   ...props
 }: ProductSwimlaneProps) {
   return (
-    <Section className="text-contrast" heading={title} padding="y" {...props}>
-      <div className="swimlane hiddenScroll md:pb-8 md:scroll-px-8 lg:scroll-px-12 md:px-8 lg:px-12">
+    <Section className="text-contrast w-fit" heading={title} padding="y" {...props}>
+      <div className="swimlane hiddenScroll md:pb-8 md:scroll-px-8 lg:scroll-px-12">
         {products.nodes.map((product) => (
           <ProductCard
             product={product}

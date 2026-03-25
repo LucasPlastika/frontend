@@ -19,9 +19,9 @@ export function TagButton({
     <button
       onClick={onClick}
       className={clsx(
-        "rounded-full font-sans-2 font-bold uppercase transition-colors",
+        "rounded-full font-sans-2 uppercase transition-colors",
         size === 'md' && 'px-4 py-2 text-xl',
-        size === 'sm' && 'px-3 py-0.5 text-base',
+        size === 'sm' && 'px-3 py-0.5 text-sm lg:text-base',
         active
           ? 'bg-primary text-contrast'
           : 'border border-contrast text-contrast hover:bg-contrast/10',

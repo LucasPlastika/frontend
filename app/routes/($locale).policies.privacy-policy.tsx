@@ -15,7 +15,7 @@ export const meta: MetaFunction = () => [
 export default function PrivacyPolicyPage() {
   return (
     <div className="bg-secondary min-h-screen">
-      <div className="container mx-auto px-6 py-12 lg:py-20">
+      <div className="container mx-auto px-4 lg:px-0 py-12 lg:py-20">
         <nav className="mb-6 flex items-center gap-2 text-sm font-bold uppercase text-contrast">
           <Link to="/" className="font-serif text-primary hover:text-contrast transition-colors">
             Home

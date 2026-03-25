@@ -1,7 +1,7 @@
 import { useParams, Form, Await, useRouteLoaderData } from '@remix-run/react';
 import useWindowScroll from 'react-use/esm/useWindowScroll';
 import { Disclosure } from '@headlessui/react';
-import { Suspense, useEffect, useMemo } from 'react';
+import { Suspense, useEffect, useRef, useMemo } from 'react';
 import { CartForm } from '@shopify/hydrogen';
 
 import { type LayoutQuery } from 'storefrontapi.generated';
@@ -69,10 +69,14 @@ function Header() {
   } = useDrawer();
 
   const addToCartFetchers = useCartFetchers(CartForm.ACTIONS.LinesAdd);
+  const prevFetchersCount = useRef(0);
 
   useEffect(() => {
-    if (isCartOpen || !addToCartFetchers.length) return;
-    openCart();
+    const currentCount = addToCartFetchers.length;
+    if (!isCartOpen && prevFetchersCount.current > 0 && currentCount === 0) {
+      openCart();
+    }
+    prevFetchersCount.current = currentCount;
   }, [addToCartFetchers, isCartOpen, openCart]);
 
   return (
@@ -90,7 +94,7 @@ function Header() {
 
 function TopBar() {
   return (
-    <div className="py-1.5 bg-[#FAB645] text-black text-lg text-center">
+    <div className="py-1.5 bg-[#FAB645] text-black md:text-lg text-center">
       <strong className="uppercase">Frete grátis</strong> a partir de R$ 99
     </div>
   );
@@ -105,7 +109,14 @@ function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
   if (!rootData) return null;
 
   return (
-    <Drawer open={isOpen} onClose={onClose} heading="Carrinho" openFrom="right">
+    <Drawer
+      open={isOpen}
+      onClose={onClose}
+      heading="Sacola"
+      headingClassName="font-sans-2 text-2xl font-bold uppercase tracking-wider text-primary"
+      openFrom="right"
+      className="bg-secondary"
+    >
       <div className="grid">
         <Suspense fallback={<CartLoading />}>
           <Await resolve={rootData?.cart}>
@@ -131,7 +142,13 @@ export function MobileMenuDrawer({
   const params = useParams();
 
   return (
-    <Drawer open={isOpen} onClose={onClose} openFrom="left" heading="Menu">
+    <Drawer
+      open={isOpen}
+      onClose={onClose}
+      openFrom="left"
+      className="bg-primary text-contrast"
+      panelClassName="w-[80vw]"
+    >
       <div className="grid">
         <nav className="grid gap-4 p-6 sm:gap-6 sm:px-12 sm:py-8">
           {NAV_LINKS.map((link) => (
@@ -140,7 +157,7 @@ export function MobileMenuDrawer({
               to={link.to}
               onClick={onClose}
               className={({ isActive }: { isActive: boolean }) =>
-                `pb-1 text-lg font-medium text-black ${isActive ? 'border-b border-black -mb-px' : ''}`
+                `pb-1 text-xl font-medium text-contrast transition-opacity hover:opacity-70 ${isActive ? 'border-b-2 border-secondary -mb-px' : ''}`
               }
             >
               {link.label}
@@ -151,14 +168,15 @@ export function MobileMenuDrawer({
           <Form
             method="get"
             action={params.locale ? `/${params.locale}/search` : '/search'}
-            className="flex items-center gap-2 border-b border-gray-200 pb-2"
+            onSubmit={onClose}
+            className="flex items-center gap-2 border-b border-contrast/20 pb-2"
           >
-            <IconSearch className="w-5 h-5 text-gray-500" />
+            <IconSearch className="w-5 h-5 text-contrast/50" />
             <input
               type="search"
               name="q"
               placeholder="Buscar..."
-              className="flex-1 bg-transparent  text-black placeholder:text-gray-200 focus:outline-none"
+              className="flex-1 bg-transparent text-contrast placeholder:text-contrast/40 focus:outline-none"
             />
           </Form>
         </div>
@@ -243,32 +261,32 @@ function MobileHeader({
   return (
     <header
       role="banner"
-      className="flex lg:hidden items-center h-nav px-4 md:px-8 bg-white text-black shadow-sm"
+      className="flex lg:hidden items-center h-nav px-4 md:px-8 bg-primary text-contrast"
     >
       <div className="flex items-center gap-4">
         <button
           onClick={openMenu}
-          className="flex items-center justify-center w-8 h-8 text-gray-700 hover:text-black transition-colors"
+          className="flex items-center justify-center w-8 h-8 text-contrast/80 hover:text-contrast transition-colors"
         >
           <IconMenu />
         </button>
       </div>
 
       <Link
-        className="flex-1 text-center text-lg font-bold uppercase tracking-widest text-black"
+        className="flex-1 text-center"
         to="/"
       >
-        Yasy
+        <img src="/logo.svg" alt="Yasy" className="h-5 w-auto mx-auto" />
       </Link>
 
       <div className="flex items-center gap-3">
         <Link
           to="/search"
-          className="flex items-center justify-center w-8 h-8 text-gray-700 hover:text-black transition-colors"
+          className="flex items-center justify-center w-8 h-8 text-contrast/80 hover:text-contrast transition-colors"
         >
           <IconSearch />
         </Link>
-        <CartCount openCart={openCart} />
+        <CartCount openCart={openCart} dark />
       </div>
     </header>
   );
@@ -358,11 +376,11 @@ const FOOTER_LEGAL_LINKS = [
 ] as const;
 
 const FOOTER_CONNECT_LINKS = [
-  { label: 'Newsletter', href: '#newsletter' },
-  { label: 'Contato', href: '/pages/contact' },
-  { label: 'Instagram', href: '#' },
-  { label: 'TikTok', href: '#' },
-  { label: 'Facebook', href: '#' },
+  { to: '#newsletter', label: 'Newsletter' },
+  { to: '/pages/contact', label: 'Contato' },
+  { to: '#', label: 'Instagram' },
+  { to: '#', label: 'TikTok' },
+  { to: '#', label: 'Facebook' },
 ] as const;
 
 type FooterSection = {
@@ -374,6 +392,7 @@ const FOOTER_SECTIONS: FooterSection[] = [
   { title: 'Loja', links: FOOTER_SHOP_LINKS },
   { title: 'Nossa História', links: FOOTER_STORY_LINKS },
   { title: 'Legal', links: FOOTER_LEGAL_LINKS },
+  { title: 'Conecte-se', links: FOOTER_CONNECT_LINKS },
 ];
 
 function SocialIcons() {
@@ -404,7 +423,7 @@ function SocialIcons() {
 
 function Footer() {
   return (
-    <footer className="bg-[#0B1215]">
+    <footer className="bg-[#0B1215] overflow-hidden">
       <div className="relative text-gray-300 container mx-auto">
         <FloatingStar
           size={200}
@@ -419,7 +438,6 @@ function Footer() {
           {FOOTER_SECTIONS.map((section) => (
             <FooterLinkColumn key={section.title} title={section.title} links={section.links} />
           ))}
-          <FooterConnectColumn />
         </div>
 
         {/* Mobile footer */}
@@ -429,7 +447,6 @@ function Footer() {
             {FOOTER_SECTIONS.map((section) => (
               <FooterAccordion key={section.title} title={section.title} links={section.links} />
             ))}
-            <FooterAccordionConnect />
           </div>
         </div>
 

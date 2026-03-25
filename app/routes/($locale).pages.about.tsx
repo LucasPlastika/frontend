@@ -50,7 +50,7 @@ export default function AboutPage() {
 
       >
         <div className="bg-secondary bottom-curve">
-          <div className="relative z-10 container mx-auto flex flex-col items-center gap-10 pb-16 md:pb-32 xl:pb-48 pt-24">
+          <div className="relative z-10 container mx-auto px-4 lg:px-0 flex flex-col items-center gap-10 pb-48 pt-24">
             <h2 data-aos="fade-up" className="text-center font-sans-2 text-6xl lg:text-8xl font-bold uppercase text-contrast ">
               SOBRE A <span className="font-sans-2 text-6xl lg:text-8xl text-primary">YASY</span>
             </h2>
@@ -145,8 +145,8 @@ export default function AboutPage() {
       </section>
       <div className="bg-primary">
         {/* Como Tudo Começou */}
-        <section className="top-curve-lg bg-secondary py-16 lg:py-24">
-          <div className="container mx-auto">
+        <section className="top-curve lg:top-curve-lg bg-secondary py-16 lg:py-24">
+          <div className="container mx-auto px-4 lg:px-0">
             <div className="grid items-center gap-12 lg:grid-cols-2">
               <div>
                 <h2 className="text-4xl lg:text-6xl uppercase leading-[1.1]">
@@ -181,8 +181,8 @@ export default function AboutPage() {
 
         {/* Nossa Filosofia */}
         <section className="bg-[#0B1215]">
-          <div className="bottom-curve bg-secondary py-16 lg:py-24">
-            <div className="container mx-auto">
+          <div className="bottom-curve bg-secondary py-24">
+            <div className="container mx-auto px-4 lg:px-0">
               <div className="grid items-center gap-12 lg:grid-cols-2">
                 <div className="flex justify-center lg:justify-start order-2 lg:order-1">
                   <div className="-rotate-3 rounded-3xl overflow-hidden shadow-2xl">
